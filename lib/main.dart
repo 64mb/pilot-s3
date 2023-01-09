@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {'/': (context) => const MyHomePage()},
     );
-    ;
   }
 }
 
@@ -111,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 .whereType<PaneItem>()
                 .elementAt(index),
           );
-          if (indexOnScreen.isNegative) return null;
+          if (indexOnScreen.isNegative) return 0;
           return indexOnScreen;
         }(),
         onChanged: (i) {
