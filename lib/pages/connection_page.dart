@@ -29,6 +29,10 @@ class ConnectionPage extends StatelessWidget {
                 height: 20,
               ),
               Text(connection.secretKey),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(connection.bucket ?? ''),
             ],
           ),
           const SizedBox(
