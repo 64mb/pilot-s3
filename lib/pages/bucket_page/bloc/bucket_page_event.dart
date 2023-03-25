@@ -22,3 +22,12 @@ class ToBack extends BucketPageEvent {
   @override
   List<Object> get props => [];
 }
+
+class FilterBucket extends BucketPageEvent {
+  const FilterBucket({required this.filter});
+
+  final String filter;
+
+  @override
+  List<Object> get props => [filter];
+}
