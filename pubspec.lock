@@ -217,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  file_icon:
+    dependency: "direct main"
+    description:
+      name: file_icon
+      sha256: c46b6c24d9595d18995758b90722865baeda407f56308eadd757e1ab913f50a1
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   fixnum:
     dependency: transitive
     description:
@@ -649,7 +657,7 @@ packages:
       sha256: "14a00e794c7c11aa145a170587321aedce29769c08d7f58b1d141da75e3b1c6f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.0"
   string_scanner:
     dependency: transitive
     description:

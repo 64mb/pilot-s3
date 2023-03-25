@@ -6,6 +6,7 @@ import 'package:minio/models.dart';
 import 'package:pilot_s3/models/connection.dart';
 import 'package:pilot_s3/pages/bucket_page/bloc/bucket_page_bloc.dart';
 import 'package:pilot_s3/storage.dart';
+import 'package:file_icon/file_icon.dart';
 
 class BucketPage extends StatelessWidget {
   BucketPage(
@@ -60,7 +61,10 @@ class BucketPage extends StatelessWidget {
                   String? objectName = object.key?.split('/').last;
                   if (objectName != '') {
                     objectsWidgets.add(ListTile(
-                      leading: const Icon(FluentIcons.page_list),
+                      leading: FileIcon(
+                        objectName ?? '',
+                        size: 22,
+                      ),
                       title: Text(objectName ?? ''),
                       onPressed: () {},
                     ));
