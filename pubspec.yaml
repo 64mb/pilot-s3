@@ -41,6 +41,7 @@ dependencies:
   file_icon: ^1.0.0
   path_provider: ^2.0.11
   system_theme: ^2.0.0
+  meta: ^1.8.0
 
 dev_dependencies:
   flutter_test:
