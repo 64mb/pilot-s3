@@ -13,11 +13,12 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v2
-      - name: set up dart
-        uses: dart-lang/setup-dart@v1
+      # - name: set up dart
+      #   uses: dart-lang/setup-dart@v1
       - name: set up flutter
         uses: subosito/flutter-action@v1
-      - run: flutter pub get
+      - name: flutter pub get
+        run: flutter pub get
       - name: analyze dart
         uses: invertase/github-action-dart-analyzer@v1
         with:
