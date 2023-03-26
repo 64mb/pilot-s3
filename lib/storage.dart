@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:minio/minio.dart';
 import 'package:minio/models.dart';
@@ -24,8 +23,8 @@ class Storage {
   _init() async {
     final appDir = await path_provider.getApplicationDocumentsDirectory();
     final documentPath = appDir.path;
-    const folderName = "PilotS3";
-    final path = Directory("$documentPath\\$folderName");
+    const folderName = 'PilotS3';
+    final path = Directory('$documentPath\\$folderName');
     if (!(await path.exists())) {
       path.create();
     }
@@ -96,7 +95,7 @@ class Storage {
   }
 
   Future<ListObjectsResult> getObjects(Connection connection, String bucket,
-      {String prefix = "", bool recursive = false, String? startAfter}) async {
+      {String prefix = '', bool recursive = false, String? startAfter}) async {
     Minio minio = Minio(
         endPoint: connection.endpoint,
         accessKey: connection.accessKey,

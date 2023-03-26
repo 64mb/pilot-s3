@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minio/models.dart';
@@ -68,10 +66,10 @@ class BucketPage extends StatelessWidget {
                       objectName.contains(state.filter)) {
                     objectsWidgets.add(ListTile(
                       leading: FileIcon(
-                        objectName ?? '',
+                        objectName,
                         size: 22,
                       ),
-                      title: Text(objectName ?? ''),
+                      title: Text(objectName),
                       onPressed: () {},
                     ));
                   }
@@ -93,7 +91,7 @@ class BucketPage extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child:
-                    Text("/$currentPath", style: const TextStyle(fontSize: 16)),
+                    Text('/$currentPath', style: const TextStyle(fontSize: 16)),
               );
 
               Container filterBox = Container(
