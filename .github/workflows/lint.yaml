@@ -1,6 +1,10 @@
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
 
-name: Lint Workflow
+name: analyze
 
 jobs:
   build:
@@ -9,10 +13,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v1
-      - run: flutter pub get
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
       - name: Analyze Dart
-        uses: zgosalvez/github-actions-analyze-dart@v2
+        uses: invertase/github-action-dart-analyzer@v1
         with:
-          fail-on-warnings: true
+          fatal-infos: false
+          fatal-warnings: true
+          annotate: true
+          annotate-only: false
+          working-directory: ./
