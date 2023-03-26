@@ -11,6 +11,7 @@ class BucketPageBloc extends Bloc<BucketPageEvent, BucketPageState> {
   BucketPageBloc() : super(const BucketPageState()) {
     on<DirectoryAdded>(_onDirectoryAdded);
     on<ToBack>(_onToBack);
+    on<FilterBucket>(_onFilterBucket);
   }
 
   _onDirectoryAdded(
@@ -30,5 +31,12 @@ class BucketPageBloc extends Bloc<BucketPageEvent, BucketPageState> {
     String newPath = state.path.replaceAll("$lastDirectory/", '');
 
     emit(state.copyWith(path: newPath));
+  }
+
+  _onFilterBucket(
+    FilterBucket event,
+    Emitter<BucketPageState> emit,
+  ) {
+    emit(state.copyWith(filter: event.filter));
   }
 }

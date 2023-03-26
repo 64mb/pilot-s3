@@ -25,7 +25,8 @@ class BucketPage extends StatelessWidget {
       create: (context) => BucketPageBloc(),
       child: BlocBuilder<BucketPageBloc, BucketPageState>(
         buildWhen: (previous, current) {
-          return previous.path != current.path;
+          return previous.path != current.path ||
+              previous.filter != current.filter;
         },
         builder: (context, state) {
           return FutureBuilder(
@@ -36,22 +37,25 @@ class BucketPage extends StatelessWidget {
               List<String>? directories = snapshot.data?.prefixes;
               List<Object>? objects = snapshot.data?.objects;
 
-              Iterable<ListTile>? directoriesWidgets = directories?.map(
-                (prefix) {
-                  print(prefix);
-                  List<String> splittedPrefix = prefix.split('/');
+              List<ListTile>? directoriesWidgets = [];
+
+              directories?.forEach(
+                (directory) {
+                  List<String> splittedPrefix = directory.split('/');
                   String? directoryName = splittedPrefix.length > 2
                       ? splittedPrefix[splittedPrefix.length - 2]
                       : splittedPrefix[0];
-                  return ListTile(
-                    leading: const Icon(FluentIcons.folder_horizontal),
-                    title: Text(directoryName.replaceAll('/', '')),
-                    onPressed: () {
-                      context
-                          .read<BucketPageBloc>()
-                          .add(DirectoryAdded(path: prefix));
-                    },
-                  );
+                  if (directoryName.contains(state.filter)) {
+                    directoriesWidgets.add(ListTile(
+                      leading: const Icon(FluentIcons.folder_horizontal),
+                      title: Text(directoryName.replaceAll('/', '')),
+                      onPressed: () {
+                        context
+                            .read<BucketPageBloc>()
+                            .add(DirectoryAdded(path: directory));
+                      },
+                    ));
+                  }
                 },
               );
               List<ListTile>? objectsWidgets = [];
@@ -59,7 +63,9 @@ class BucketPage extends StatelessWidget {
               objects?.forEach(
                 (object) {
                   String? objectName = object.key?.split('/').last;
-                  if (objectName != '') {
+                  if (objectName != '' &&
+                      objectName != null &&
+                      objectName.contains(state.filter)) {
                     objectsWidgets.add(ListTile(
                       leading: FileIcon(
                         objectName ?? '',
@@ -80,10 +86,8 @@ class BucketPage extends StatelessWidget {
                 },
               );
               if (state.path != '') allTiles.add(backTile);
-              if (directoriesWidgets != null) {
-                allTiles.addAll(directoriesWidgets);
-              }
-              if (objectsWidgets != null) allTiles.addAll(objectsWidgets);
+              allTiles.addAll(directoriesWidgets);
+              allTiles.addAll(objectsWidgets);
 
               Container pathWidget = Container(
                 padding:
@@ -92,7 +96,23 @@ class BucketPage extends StatelessWidget {
                     Text("/$currentPath", style: const TextStyle(fontSize: 16)),
               );
 
-              List<Widget> allWidgets = [pathWidget, ...allTiles];
+              Container filterBox = Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextBox(
+                  prefix: Container(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: const Icon(FluentIcons.search)),
+                  placeholder: 'Search',
+                  initialValue: state.filter,
+                  onChanged: (value) {
+                    context
+                        .read<BucketPageBloc>()
+                        .add(FilterBucket(filter: value));
+                  },
+                ),
+              );
+
+              List<Widget> allWidgets = [pathWidget, filterBox, ...allTiles];
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
