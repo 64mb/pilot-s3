@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:minio/minio.dart';
 import 'package:minio/models.dart' hide Object;
 import 'package:pilot_s3/models/connection.dart';
 import 'package:pilot_s3/storage.dart';

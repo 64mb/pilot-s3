@@ -1,6 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minio/models.dart';
 import 'package:pilot_s3/models/connection.dart';
@@ -9,7 +7,6 @@ import 'package:pilot_s3/pages/home_page/bloc/home_page_bloc.dart';
 import 'package:pilot_s3/pages/settings_page/settings_page.dart';
 import 'package:pilot_s3/pages/bucket_page/bucket_page.dart';
 import 'package:pilot_s3/storage.dart';
-import 'package:minio/minio.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.storage});

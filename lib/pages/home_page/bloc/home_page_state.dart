@@ -3,7 +3,7 @@ part of 'home_page_bloc.dart';
 class HomePageState extends Equatable {
   const HomePageState(
       {this.connections = const [],
-      this.search = "",
+      this.search = '',
       this.tabIndex = 0,
       this.buckets = const {}});
 
