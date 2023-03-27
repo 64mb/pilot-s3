@@ -7,14 +7,14 @@ class SettingsPageState extends Equatable {
     this.accessKey = '',
     this.secretKey = '',
     this.endpoint = '',
-    this.bucket = '',
+    this.bucket,
   });
 
   final String name;
   final String accessKey;
   final String secretKey;
   final String endpoint;
-  final String bucket;
+  final String? bucket;
 
   SettingsPageState copyWith({
     String? name,
