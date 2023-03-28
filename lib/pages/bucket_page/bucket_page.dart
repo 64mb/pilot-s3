@@ -105,7 +105,6 @@ class BucketPage extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 12),
                       child: const Icon(FluentIcons.search)),
                   placeholder: 'Search',
-                  initialValue: state.filter,
                   onChanged: (value) {
                     context
                         .read<BucketPageBloc>()
