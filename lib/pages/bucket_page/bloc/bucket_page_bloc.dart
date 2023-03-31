@@ -22,10 +22,8 @@ class BucketPageBloc extends Bloc<BucketPageEvent, BucketPageState> {
     ToBack event,
     Emitter<BucketPageState> emit,
   ) {
-    List<String> splittedPath = state.path.split('/');
-    String lastDirectory = splittedPath.elementAt(splittedPath.length - 2);
-
-    String newPath = state.path.replaceAll('$lastDirectory/', '');
+    List<String> newPath = [...state.path];
+    newPath.removeLast();
 
     emit(state.copyWith(path: newPath));
   }
