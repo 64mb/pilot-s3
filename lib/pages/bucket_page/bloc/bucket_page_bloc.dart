@@ -22,8 +22,7 @@ class BucketPageBloc extends Bloc<BucketPageEvent, BucketPageState> {
     ToBack event,
     Emitter<BucketPageState> emit,
   ) {
-    List<String> newPath = [...state.path];
-    newPath.removeLast();
+    List<String> newPath = state.path.sublist(0, state.path.length - 1);
 
     emit(state.copyWith(path: newPath));
   }
