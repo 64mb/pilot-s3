@@ -27,14 +27,15 @@ class BucketPage extends StatelessWidget {
               previous.filter != current.filter;
         },
         builder: (context, state) {
+          String currentPath = state.path.isNotEmpty
+              ? '${state.path.join('/')}/'
+              : state.path.join('/');
           return FutureBuilder(
-            future:
-                storage.getObjects(connection, bucket.name, prefix: state.path),
+            future: storage.getObjects(connection, bucket.name,
+                prefix: currentPath),
             builder: (context, snapshot) {
-              String currentPath = state.path;
               List<String>? directories = snapshot.data?.prefixes;
               List<Object>? objects = snapshot.data?.objects;
-
               List<ListTile>? directoriesWidgets = [];
 
               directories?.forEach(
@@ -43,6 +44,9 @@ class BucketPage extends StatelessWidget {
                   String? directoryName = splittedPrefix.length > 2
                       ? splittedPrefix[splittedPrefix.length - 2]
                       : splittedPrefix[0];
+                  List<String> newPath = [...state.path];
+                  newPath.add(directoryName);
+
                   if (directoryName.contains(state.filter)) {
                     directoriesWidgets.add(ListTile(
                       leading: const Icon(FluentIcons.folder_horizontal),
@@ -50,7 +54,7 @@ class BucketPage extends StatelessWidget {
                       onPressed: () {
                         context
                             .read<BucketPageBloc>()
-                            .add(DirectoryAdded(path: directory));
+                            .add(DirectoryAdded(path: newPath));
                       },
                     ));
                   }
@@ -83,7 +87,7 @@ class BucketPage extends StatelessWidget {
                   context.read<BucketPageBloc>().add(const ToBack());
                 },
               );
-              if (state.path != '') allTiles.add(backTile);
+              if (state.path.isNotEmpty) allTiles.add(backTile);
               allTiles.addAll(directoriesWidgets);
               allTiles.addAll(objectsWidgets);
 
