@@ -49,6 +49,16 @@ class EndpointChanged extends SettingsPageEvent {
 }
 
 @immutable
+class BucketChanged extends SettingsPageEvent {
+  const BucketChanged({required this.bucket});
+
+  final String? bucket;
+
+  @override
+  List<Object?> get props => [bucket];
+}
+
+@immutable
 class AddSubmitted extends SettingsPageEvent {
   const AddSubmitted();
 
