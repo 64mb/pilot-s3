@@ -12,6 +12,9 @@ class Connection {
   final String secretKey;
   @HiveField(3)
   final String name;
+  @HiveField(4)
+  final String? bucket;
 
-  Connection(this.name, this.endpoint, this.accessKey, this.secretKey);
+  Connection(
+      this.name, this.endpoint, this.accessKey, this.secretKey, this.bucket);
 }

@@ -6,6 +6,7 @@ import 'package:minio/models.dart';
 import 'package:pilot_s3/models/connection.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:path/path.dart' as path;
 
 class Storage {
   final StreamController<List<Connection>> _controller =
@@ -22,13 +23,14 @@ class Storage {
 
   _init() async {
     final appDir = await path_provider.getApplicationDocumentsDirectory();
-    final documentPath = appDir.path;
-    const folderName = 'PilotS3';
-    final path = Directory('$documentPath\\$folderName');
-    if (!(await path.exists())) {
-      path.create();
+    final documentPath =
+        Platform.isLinux ? path.join(appDir.path, '.config') : appDir.path;
+    final folderName = Platform.isLinux ? "pilot-s3" : "PilotS3";
+    final configPath = Directory(path.join(documentPath, folderName));
+    if (!(await configPath.exists())) {
+      configPath.create(recursive: true);
     }
-    Hive.init(path.path);
+    Hive.init(configPath.path);
     Hive.registerAdapter(ConnectionAdapter());
     _box = await Hive.openBox<Connection>('Connections');
     final connectionList = _box.values.toList();
@@ -63,12 +65,18 @@ class Storage {
   }
 
   Future<List<Bucket>> getBucketsForConnection(Connection connection) async {
-    Map<String, List<Bucket>> bucketsMap = {};
     Minio minio = Minio(
         endPoint: connection.endpoint,
         accessKey: connection.accessKey,
         secretKey: connection.secretKey);
-    List<Bucket> buckets = await minio.listBuckets();
+
+    List<Bucket> buckets = [];
+
+    if (connection.bucket == null) {
+      buckets.addAll(await minio.listBuckets());
+    } else {
+      buckets.add(Bucket(DateTime.now(), connection.bucket!));
+    }
     return buckets;
   }
 

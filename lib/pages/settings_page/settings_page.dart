@@ -27,7 +27,7 @@ class SettingsPage extends StatelessWidget {
                           .read<SettingsPageBloc>()
                           .add(NameChanged(name: value));
                     },
-                    outsidePrefix: Row(children: const [
+                    prefix: Row(children: const [
                       SizedBox(
                         width: 100,
                         child: Text('Name'),
@@ -46,7 +46,7 @@ class SettingsPage extends StatelessWidget {
                           .read<SettingsPageBloc>()
                           .add(EndpointChanged(endpoint: value));
                     },
-                    outsidePrefix: Row(children: const [
+                    prefix: Row(children: const [
                       SizedBox(
                         width: 100,
                         child: Text('Endpoint'),
@@ -65,7 +65,7 @@ class SettingsPage extends StatelessWidget {
                           .read<SettingsPageBloc>()
                           .add(AccessKeyChanged(accessKey: value));
                     },
-                    outsidePrefix: Row(children: const [
+                    prefix: Row(children: const [
                       SizedBox(
                         width: 100,
                         child: Text('Access key'),
@@ -84,10 +84,29 @@ class SettingsPage extends StatelessWidget {
                           .read<SettingsPageBloc>()
                           .add(SecretKeyChanged(secretKey: value));
                     },
-                    outsidePrefix: Row(children: const [
+                    prefix: Row(children: const [
                       SizedBox(
                         width: 100,
                         child: Text('Secret key'),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      )
+                    ]),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextBox(
+                    onChanged: (value) {
+                      context
+                          .read<SettingsPageBloc>()
+                          .add(BucketChanged(bucket: value));
+                    },
+                    prefix: Row(children: const [
+                      SizedBox(
+                        width: 100,
+                        child: Text('Bucket'),
                       ),
                       SizedBox(
                         width: 12,

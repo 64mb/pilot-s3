@@ -31,7 +31,7 @@ environment:
 dependencies:
   bloc: ^8.1.0
   equatable: ^2.0.5
-  fluent_ui: ^4.0.3+1
+  fluent_ui: ^4.4.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
@@ -39,6 +39,7 @@ dependencies:
   hive_flutter: ^1.1.0
   minio: ^3.5.0
   file_icon: ^1.0.0
+  path: ^1.8.2
   path_provider: ^2.0.11
   system_theme: ^2.0.0
   meta: ^1.8.0
