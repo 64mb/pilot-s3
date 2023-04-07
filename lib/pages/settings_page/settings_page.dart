@@ -117,7 +117,7 @@ class SettingsPage extends StatelessWidget {
                     height: 20,
                   ),
                   Button(
-                    child: const Text('Добавить подключение'),
+                    child: const Text('Add connection'),
                     onPressed: () async {
                       context
                           .read<SettingsPageBloc>()
