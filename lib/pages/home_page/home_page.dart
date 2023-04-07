@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
               icon: const Icon(FluentIcons.bucket_color_fill));
         }).toList();
       }
-      items.add(PaneItem(
+      items.add(PaneItemExpander(
           title: Text(connection.name),
           body: ConnectionPage(
             connection: connection,
@@ -39,8 +39,8 @@ class HomePage extends StatelessWidget {
               storage.deleteConnection(connection);
             },
           ),
+          items: bucketItems,
           icon: const Icon(FluentIcons.add_connection)));
-      items.addAll(bucketItems);
     }
 
     return items;
