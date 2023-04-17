@@ -84,28 +84,30 @@ class BucketPage extends StatelessWidget {
                             .getDirectoryPath(
                                 initialDirectory: downloadDir?.path ?? '/');
 
-                        Minio minio = Minio(
-                            endPoint: connection.endpoint,
-                            accessKey: connection.accessKey,
-                            secretKey: connection.secretKey);
+                        if (selectedDirectory != null) {
+                          Minio minio = Minio(
+                              endPoint: connection.endpoint,
+                              accessKey: connection.accessKey,
+                              secretKey: connection.secretKey);
 
-                        await minio.fGetObject(
-                            bucket.name,
-                            object.key!,
-                            path_lib.join(selectedDirectory!,
-                                path_lib.basename(object.key!)));
+                          await minio.fGetObject(
+                              bucket.name,
+                              object.key!,
+                              path_lib.join(selectedDirectory!,
+                                  path_lib.basename(object.key!)));
 
-                        displayInfoBar(context, builder: (context, close) {
-                          return InfoBar(
-                            title: const Text('File downloaded'),
-                            content: Text(object.key!),
-                            action: IconButton(
-                              icon: const Icon(FluentIcons.clear),
-                              onPressed: close,
-                            ),
-                            severity: InfoBarSeverity.success,
-                          );
-                        });
+                          displayInfoBar(context, builder: (context, close) {
+                            return InfoBar(
+                              title: const Text('File downloaded'),
+                              content: Text(object.key!),
+                              action: IconButton(
+                                icon: const Icon(FluentIcons.clear),
+                                onPressed: close,
+                              ),
+                              severity: InfoBarSeverity.success,
+                            );
+                          });
+                        }
                       },
                     ));
                   }
