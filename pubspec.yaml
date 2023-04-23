@@ -32,8 +32,6 @@ dependencies:
   bloc: ^8.1.0
   equatable: ^2.0.5
   fluent_ui: ^4.0.3+1
-  flutter:
-    sdk: flutter
   flutter_bloc: ^8.1.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -44,6 +42,8 @@ dependencies:
   meta: ^1.8.0
   path: ^1.8.2
   file_picker: ^5.2.6
+  flutter:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
