@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minio/io.dart';
@@ -14,15 +12,15 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path_lib;
 
 class BucketPage extends StatelessWidget {
-  BucketPage(
+  const BucketPage(
       {super.key,
       required this.bucket,
       required this.connection,
       required this.storage});
 
-  Storage storage;
-  Connection connection;
-  Bucket bucket;
+  final Storage storage;
+  final Connection connection;
+  final Bucket bucket;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +81,6 @@ class BucketPage extends StatelessWidget {
                         String? selectedDirectory = await FilePicker.platform
                             .getDirectoryPath(
                                 initialDirectory: downloadDir?.path ?? '/');
-
                         if (selectedDirectory != null) {
                           Minio minio = Minio(
                               endPoint: connection.endpoint,
@@ -93,7 +90,7 @@ class BucketPage extends StatelessWidget {
                           await minio.fGetObject(
                               bucket.name,
                               object.key!,
-                              path_lib.join(selectedDirectory!,
+                              path_lib.join(selectedDirectory,
                                   path_lib.basename(object.key!)));
 
                           displayInfoBar(context, builder: (context, close) {
