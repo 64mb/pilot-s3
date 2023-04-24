@@ -21,13 +21,14 @@ class ConnectionAdapter extends TypeAdapter<Connection> {
       fields[0] as String,
       fields[1] as String,
       fields[2] as String,
+      fields[4] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Connection obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.endpoint)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class ConnectionAdapter extends TypeAdapter<Connection> {
       ..writeByte(2)
       ..write(obj.secretKey)
       ..writeByte(3)
-      ..write(obj.name);
+      ..write(obj.name)
+      ..writeByte(4)
+      ..write(obj.bucket);
   }
 
   @override

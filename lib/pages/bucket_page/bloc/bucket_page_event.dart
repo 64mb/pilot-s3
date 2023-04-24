@@ -10,7 +10,7 @@ abstract class BucketPageEvent extends Equatable {
 class DirectoryAdded extends BucketPageEvent {
   const DirectoryAdded({required this.path});
 
-  final String path;
+  final List<String> path;
 
   @override
   List<Object> get props => [path];
