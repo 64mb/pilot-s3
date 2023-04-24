@@ -78,6 +78,7 @@ class BucketPage extends StatelessWidget {
                         objectName,
                         size: 22,
                       ),
+                      trailing: const Icon(FluentIcons.download),
                       title: Text(objectName),
                       onPressed: () async {
                         var downloadDir =
