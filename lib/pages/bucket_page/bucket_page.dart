@@ -25,8 +25,9 @@ class BucketPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BucketPageBloc(storage: storage, bucket: bucket.name)
-        ..add(const ObjectsRequested()),
+      create: (context) => BucketPageBloc(
+          storage: storage, connection: connection, bucket: bucket.name)
+        ..add(const ObjectsRequested(prefix: '')),
       child: BlocBuilder<BucketPageBloc, BucketPageState>(
         buildWhen: (previous, current) {
           return previous.path != current.path ||
@@ -59,6 +60,9 @@ class BucketPage extends StatelessWidget {
                     context
                         .read<BucketPageBloc>()
                         .add(DirectoryAdded(path: newPath));
+                    context
+                        .read<BucketPageBloc>()
+                        .add(ObjectsRequested(prefix: newPath.join('/')));
                   },
                 ));
               }
@@ -119,7 +123,12 @@ class BucketPage extends StatelessWidget {
             title: const Text('Back'),
             leading: const Icon(FluentIcons.navigate_back),
             onPressed: () {
+              List<String> newPath =
+                  state.path.sublist(0, state.path.length - 1);
               context.read<BucketPageBloc>().add(const ToBack());
+              context
+                  .read<BucketPageBloc>()
+                  .add(ObjectsRequested(prefix: newPath.join('/')));
             },
           );
           if (state.path.isNotEmpty) allTiles.add(backTile);

@@ -42,8 +42,10 @@ class ChangeStatus extends BucketPageEvent {
 }
 
 class ObjectsRequested extends BucketPageEvent {
-  const ObjectsRequested();
+  const ObjectsRequested({required this.prefix});
+
+  final String prefix;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [prefix];
 }

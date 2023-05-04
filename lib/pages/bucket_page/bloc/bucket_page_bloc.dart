@@ -1,13 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:minio/models.dart' hide Object;
+import 'package:pilot_s3/models/connection.dart';
 import 'package:pilot_s3/storage.dart';
 
 part 'bucket_page_event.dart';
 part 'bucket_page_state.dart';
 
 class BucketPageBloc extends Bloc<BucketPageEvent, BucketPageState> {
-  BucketPageBloc({required this.storage, required this.bucket})
+  BucketPageBloc(
+      {required this.storage, required this.connection, required this.bucket})
       : super(BucketPageState(
             items: ListObjectsResult(objects: [], prefixes: []))) {
     on<DirectoryAdded>(_onDirectoryAdded);
@@ -19,6 +21,7 @@ class BucketPageBloc extends Bloc<BucketPageEvent, BucketPageState> {
 
   final Storage storage;
   final String bucket;
+  final Connection connection;
 
   _onDirectoryAdded(
     DirectoryAdded event,
@@ -43,20 +46,16 @@ class BucketPageBloc extends Bloc<BucketPageEvent, BucketPageState> {
     emit(state.copyWith(filter: event.filter));
   }
 
-  Future<void> _onObjectRequested(
+  _onObjectRequested(
     ObjectsRequested event,
     Emitter<BucketPageState> emit,
   ) async {
     emit(state.copyWith(status: BucketStatus.loading));
 
-    await emit.forEach<ListObjectsResult>(
-      storage.getBucketObjectStream(bucket),
-      onData: (objects) => state.copyWith(
-        status: BucketStatus.success,
-        items: objects,
-      ),
-      onError: (_, __) => state.copyWith(status: BucketStatus.failure),
-    );
+    ListObjectsResult objects =
+        await storage.getObjects(connection, bucket, prefix: event.prefix);
+
+    emit(state.copyWith(status: BucketStatus.success, items: objects));
   }
 
   _onChangeStatus(

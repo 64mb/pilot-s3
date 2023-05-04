@@ -45,15 +45,6 @@ class Storage {
   Stream<List<Connection>> getConnectionStream() => _controller.stream;
   Stream<Map<String, List<Bucket>>> getBucketStream() =>
       _bucketController.stream;
-  Stream<ListObjectsResult> getBucketObjectStream(String bucketName) {
-    if (!_objectControllers.containsKey(bucketName)) {
-      _objectControllers[bucketName] = StreamController<ListObjectsResult>();
-    }
-
-    print(bucketName);
-
-    return _objectControllers[bucketName]!.stream;
-  }
 
   void saveConnection(Connection connection) async {
     Map<dynamic, Connection> connectionMap = _box.toMap();
@@ -112,21 +103,14 @@ class Storage {
     _controller.add(connectionList);
   }
 
-  void getObjects(Connection connection, String bucket,
+  Future<ListObjectsResult> getObjects(Connection connection, String bucket,
       {String prefix = '', bool recursive = false, String? startAfter}) async {
     Minio minio = Minio(
         endPoint: connection.endpoint,
         accessKey: connection.accessKey,
         secretKey: connection.secretKey);
 
-    ListObjectsResult objects =
-        await minio.listAllObjectsV2(bucket, prefix: prefix);
-
-    if (_objectControllers.containsKey(bucket)) {
-      _objectControllers[bucket]?.add(objects);
-    } else {
-      _objectControllers[bucket] = StreamController<ListObjectsResult>();
-      _objectControllers[bucket]?.add(objects);
-    }
+    String formattedPrefix = prefix == '' ? prefix : '$prefix/';
+    return await minio.listAllObjectsV2(bucket, prefix: formattedPrefix);
   }
 }
