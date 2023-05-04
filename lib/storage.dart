@@ -13,8 +13,11 @@ class Storage {
       StreamController<List<Connection>>();
   final StreamController<Map<String, List<Bucket>>> _bucketController =
       StreamController<Map<String, List<Bucket>>>();
-  final StreamController<List<ListObjectsResult>> _objectController =
-      StreamController<List<ListObjectsResult>>();
+  final StreamController<ListObjectsResult> _objectController =
+      StreamController<ListObjectsResult>();
+
+  final Map<String, StreamController<ListObjectsResult>> _objectControllers =
+      {};
   late Box<Connection> _box;
 
   Storage() {
@@ -42,8 +45,15 @@ class Storage {
   Stream<List<Connection>> getConnectionStream() => _controller.stream;
   Stream<Map<String, List<Bucket>>> getBucketStream() =>
       _bucketController.stream;
-  Stream<List<ListObjectsResult>> getBucketObjectStream() =>
-      _objectController.stream;
+  Stream<ListObjectsResult> getBucketObjectStream(String bucketName) {
+    if (!_objectControllers.containsKey(bucketName)) {
+      _objectControllers[bucketName] = StreamController<ListObjectsResult>();
+    }
+
+    print(bucketName);
+
+    return _objectControllers[bucketName]!.stream;
+  }
 
   void saveConnection(Connection connection) async {
     Map<dynamic, Connection> connectionMap = _box.toMap();
@@ -102,12 +112,21 @@ class Storage {
     _controller.add(connectionList);
   }
 
-  Future<ListObjectsResult> getObjects(Connection connection, String bucket,
+  void getObjects(Connection connection, String bucket,
       {String prefix = '', bool recursive = false, String? startAfter}) async {
     Minio minio = Minio(
         endPoint: connection.endpoint,
         accessKey: connection.accessKey,
         secretKey: connection.secretKey);
-    return await minio.listAllObjectsV2(bucket, prefix: prefix);
+
+    ListObjectsResult objects =
+        await minio.listAllObjectsV2(bucket, prefix: prefix);
+
+    if (_objectControllers.containsKey(bucket)) {
+      _objectControllers[bucket]?.add(objects);
+    } else {
+      _objectControllers[bucket] = StreamController<ListObjectsResult>();
+      _objectControllers[bucket]?.add(objects);
+    }
   }
 }

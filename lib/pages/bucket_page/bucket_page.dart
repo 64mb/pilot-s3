@@ -25,138 +25,140 @@ class BucketPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BucketPageBloc(),
+      create: (context) => BucketPageBloc(storage: storage, bucket: bucket.name)
+        ..add(const ObjectsRequested()),
       child: BlocBuilder<BucketPageBloc, BucketPageState>(
         buildWhen: (previous, current) {
           return previous.path != current.path ||
-              previous.filter != current.filter;
+              previous.filter != current.filter ||
+              previous.status != current.status;
         },
         builder: (context, state) {
           String currentPath = state.path.isNotEmpty
               ? '${state.path.join('/')}/'
               : state.path.join('/');
-          return FutureBuilder(
-            future: storage.getObjects(connection, bucket.name,
-                prefix: currentPath),
-            builder: (context, snapshot) {
-              List<String>? directories = snapshot.data?.prefixes;
-              List<Object>? objects = snapshot.data?.objects;
-              List<ListTile>? directoriesWidgets = [];
 
-              directories?.forEach(
-                (directory) {
-                  List<String> splittedPrefix = directory.split('/');
-                  String? directoryName = splittedPrefix.length > 2
-                      ? splittedPrefix[splittedPrefix.length - 2]
-                      : splittedPrefix[0];
-                  List<String> newPath = [...state.path];
-                  newPath.add(directoryName);
+          List<String>? directories = state.items.prefixes;
+          List<Object>? objects = state.items.objects;
+          List<ListTile>? directoriesWidgets = [];
 
-                  if (directoryName.contains(state.filter)) {
-                    directoriesWidgets.add(ListTile(
-                      leading: const Icon(FluentIcons.folder_horizontal),
-                      title: Text(directoryName.replaceAll('/', '')),
-                      onPressed: () {
-                        context
-                            .read<BucketPageBloc>()
-                            .add(DirectoryAdded(path: newPath));
-                      },
-                    ));
-                  }
-                },
-              );
-              List<ListTile>? objectsWidgets = [];
+          directories.forEach(
+            (directory) {
+              List<String> splittedPrefix = directory.split('/');
+              String? directoryName = splittedPrefix.length > 2
+                  ? splittedPrefix[splittedPrefix.length - 2]
+                  : splittedPrefix[0];
+              List<String> newPath = [...state.path];
+              newPath.add(directoryName);
 
-              objects?.forEach(
-                (object) {
-                  String? objectName = object.key?.split('/').last;
-                  if (objectName != '' &&
-                      objectName != null &&
-                      objectName.contains(state.filter)) {
-                    objectsWidgets.add(ListTile(
-                      leading: FileIcon(
-                        objectName,
-                        size: 22,
-                      ),
-                      trailing: const Icon(FluentIcons.download),
-                      title: Text(objectName),
-                      onPressed: () async {
-                        var downloadDir =
-                            await path_provider.getDownloadsDirectory();
-                        String? selectedDirectory = await FilePicker.platform
-                            .getDirectoryPath(
-                                initialDirectory: downloadDir?.path ?? '/');
-                        if (selectedDirectory != null) {
-                          Minio minio = Minio(
-                              endPoint: connection.endpoint,
-                              accessKey: connection.accessKey,
-                              secretKey: connection.secretKey);
-
-                          await minio.fGetObject(
-                              bucket.name,
-                              object.key!,
-                              path_lib.join(selectedDirectory,
-                                  path_lib.basename(object.key!)));
-
-                          displayInfoBar(context, builder: (context, close) {
-                            return InfoBar(
-                              title: const Text('File downloaded'),
-                              content: Text(object.key!),
-                              action: IconButton(
-                                icon: const Icon(FluentIcons.clear),
-                                onPressed: close,
-                              ),
-                              severity: InfoBarSeverity.success,
-                            );
-                          });
-                        }
-                      },
-                    ));
-                  }
-                },
-              );
-              List<ListTile> allTiles = [];
-              ListTile backTile = ListTile(
-                title: const Text('Back'),
-                leading: const Icon(FluentIcons.navigate_back),
-                onPressed: () {
-                  context.read<BucketPageBloc>().add(const ToBack());
-                },
-              );
-              if (state.path.isNotEmpty) allTiles.add(backTile);
-              allTiles.addAll(directoriesWidgets);
-              allTiles.addAll(objectsWidgets);
-
-              Container pathWidget = Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child:
-                    Text('/$currentPath', style: const TextStyle(fontSize: 16)),
-              );
-
-              Container filterBox = Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: TextBox(
-                  prefix: Container(
-                      padding: const EdgeInsets.only(left: 12),
-                      child: const Icon(FluentIcons.search)),
-                  placeholder: 'Search',
-                  onChanged: (value) {
+              if (directoryName.contains(state.filter)) {
+                directoriesWidgets.add(ListTile(
+                  leading: const Icon(FluentIcons.folder_horizontal),
+                  title: Text(directoryName.replaceAll('/', '')),
+                  onPressed: () {
                     context
                         .read<BucketPageBloc>()
-                        .add(FilterBucket(filter: value));
+                        .add(DirectoryAdded(path: newPath));
                   },
-                ),
-              );
-
-              List<Widget> allWidgets = [pathWidget, filterBox, ...allTiles];
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: allWidgets,
-                ),
-              );
+                ));
+              }
             },
+          );
+          List<ListTile>? objectsWidgets = [];
+
+          objects.forEach(
+            (object) {
+              String? objectName = object.key?.split('/').last;
+              if (objectName != '' &&
+                  objectName != null &&
+                  objectName.contains(state.filter)) {
+                objectsWidgets.add(ListTile(
+                  leading: FileIcon(
+                    objectName,
+                    size: 22,
+                  ),
+                  trailing: const Icon(FluentIcons.download),
+                  title: Text(objectName),
+                  onPressed: () async {
+                    var downloadDir =
+                        await path_provider.getDownloadsDirectory();
+                    String? selectedDirectory = await FilePicker.platform
+                        .getDirectoryPath(
+                            initialDirectory: downloadDir?.path ?? '/');
+                    if (selectedDirectory != null) {
+                      Minio minio = Minio(
+                          endPoint: connection.endpoint,
+                          accessKey: connection.accessKey,
+                          secretKey: connection.secretKey);
+
+                      await minio.fGetObject(
+                          bucket.name,
+                          object.key!,
+                          path_lib.join(selectedDirectory,
+                              path_lib.basename(object.key!)));
+
+                      displayInfoBar(context, builder: (context, close) {
+                        return InfoBar(
+                          title: const Text('File downloaded'),
+                          content: Text(object.key!),
+                          action: IconButton(
+                            icon: const Icon(FluentIcons.clear),
+                            onPressed: close,
+                          ),
+                          severity: InfoBarSeverity.success,
+                        );
+                      });
+                    }
+                  },
+                ));
+              }
+            },
+          );
+          List<ListTile> allTiles = [];
+          ListTile backTile = ListTile(
+            title: const Text('Back'),
+            leading: const Icon(FluentIcons.navigate_back),
+            onPressed: () {
+              context.read<BucketPageBloc>().add(const ToBack());
+            },
+          );
+          if (state.path.isNotEmpty) allTiles.add(backTile);
+          allTiles.addAll(directoriesWidgets);
+          allTiles.addAll(objectsWidgets);
+
+          Container pathWidget = Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: Text('/$currentPath', style: const TextStyle(fontSize: 16)),
+          );
+
+          Container filterBox = Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: TextBox(
+              prefix: Container(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: const Icon(FluentIcons.search)),
+              placeholder: 'Search',
+              onChanged: (value) {
+                context.read<BucketPageBloc>().add(FilterBucket(filter: value));
+              },
+            ),
+          );
+
+          Widget progressWidget = const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Center(
+              child: ProgressRing(),
+            ),
+          );
+
+          List<Widget> allWidgets = state.status == BucketStatus.success
+              ? [pathWidget, filterBox, ...allTiles]
+              : [pathWidget, filterBox, progressWidget];
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: allWidgets,
+            ),
           );
         },
       ),
