@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         title: 'PilotS3',
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
-        darkTheme: ThemeData(
+        darkTheme: FluentThemeData(
           brightness: Brightness.dark,
           accentColor: Colors.blue,
           visualDensity: VisualDensity.standard,
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
             glowFactor: is10footScreen() ? 2.0 : 0.0,
           ),
         ),
-        theme: ThemeData(
+        theme: FluentThemeData(
           accentColor: Colors.blue,
           visualDensity: VisualDensity.standard,
           focusTheme: FocusThemeData(
