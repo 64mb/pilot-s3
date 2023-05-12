@@ -13,8 +13,11 @@ class Storage {
       StreamController<List<Connection>>();
   final StreamController<Map<String, List<Bucket>>> _bucketController =
       StreamController<Map<String, List<Bucket>>>();
-  final StreamController<List<ListObjectsResult>> _objectController =
-      StreamController<List<ListObjectsResult>>();
+  final StreamController<ListObjectsResult> _objectController =
+      StreamController<ListObjectsResult>();
+
+  final Map<String, StreamController<ListObjectsResult>> _objectControllers =
+      {};
   late Box<Connection> _box;
 
   Storage() {
@@ -42,8 +45,6 @@ class Storage {
   Stream<List<Connection>> getConnectionStream() => _controller.stream;
   Stream<Map<String, List<Bucket>>> getBucketStream() =>
       _bucketController.stream;
-  Stream<List<ListObjectsResult>> getBucketObjectStream() =>
-      _objectController.stream;
 
   void saveConnection(Connection connection) async {
     Map<dynamic, Connection> connectionMap = _box.toMap();
@@ -108,6 +109,8 @@ class Storage {
         endPoint: connection.endpoint,
         accessKey: connection.accessKey,
         secretKey: connection.secretKey);
-    return await minio.listAllObjectsV2(bucket, prefix: prefix);
+
+    String formattedPrefix = prefix == '' ? prefix : '$prefix/';
+    return await minio.listAllObjectsV2(bucket, prefix: formattedPrefix);
   }
 }
