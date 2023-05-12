@@ -31,3 +31,21 @@ class FilterBucket extends BucketPageEvent {
   @override
   List<Object> get props => [filter];
 }
+
+class ChangeStatus extends BucketPageEvent {
+  const ChangeStatus({required this.status});
+
+  final BucketStatus status;
+
+  @override
+  List<Object> get props => [status];
+}
+
+class ObjectsRequested extends BucketPageEvent {
+  const ObjectsRequested({required this.prefix});
+
+  final String prefix;
+
+  @override
+  List<Object> get props => [prefix];
+}
