@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minio/io.dart';
@@ -9,6 +11,7 @@ import 'package:pilot_s3/storage.dart';
 import 'package:file_icon/file_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path_lib;
 
 class BucketPage extends StatelessWidget {
@@ -135,9 +138,12 @@ class BucketPage extends StatelessWidget {
           allTiles.addAll(directoriesWidgets);
           allTiles.addAll(objectsWidgets);
 
-          Container pathWidget = Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text('/$currentPath', style: const TextStyle(fontSize: 16)),
+          Expanded pathWidget = Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child:
+                  Text('/$currentPath', style: const TextStyle(fontSize: 16)),
+            ),
           );
 
           IconButton refreshButton = IconButton(
@@ -148,6 +154,32 @@ class BucketPage extends StatelessWidget {
                     .add(ObjectsRequested(prefix: state.path.join('/')));
               });
 
+          IconButton uploadButton = IconButton(
+            icon: const Icon(FluentIcons.add),
+            onPressed: () async {
+              FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+              if (result != null) {
+                File file = File(result.files.single.path!);
+                Minio minio = Minio(
+                    endPoint: connection.endpoint,
+                    accessKey: connection.accessKey,
+                    secretKey: connection.secretKey);
+
+                String fileName = result.files.single.name;
+                String path = state.path.join('/');
+
+                String object =
+                    state.path.isNotEmpty ? '$path/$fileName' : fileName;
+
+                await minio.fPutObject(bucket.name, object, file.path);
+                context
+                    .read<BucketPageBloc>()
+                    .add(ObjectsRequested(prefix: path));
+              }
+            },
+          );
+
           Container toolbar = Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
@@ -156,7 +188,11 @@ class BucketPage extends StatelessWidget {
                 const SizedBox(
                   width: 16,
                 ),
-                pathWidget
+                pathWidget,
+                const SizedBox(
+                  width: 16,
+                ),
+                uploadButton,
               ],
             ),
           );
