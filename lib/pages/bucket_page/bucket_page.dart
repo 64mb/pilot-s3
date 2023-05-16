@@ -136,12 +136,33 @@ class BucketPage extends StatelessWidget {
           allTiles.addAll(objectsWidgets);
 
           Container pathWidget = Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text('/$currentPath', style: const TextStyle(fontSize: 16)),
           );
 
+          IconButton refreshButton = IconButton(
+              icon: const Icon(FluentIcons.refresh),
+              onPressed: () {
+                context
+                    .read<BucketPageBloc>()
+                    .add(ObjectsRequested(prefix: state.path.join('/')));
+              });
+
+          Container toolbar = Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                refreshButton,
+                const SizedBox(
+                  width: 16,
+                ),
+                pathWidget
+              ],
+            ),
+          );
+
           Container filterBox = Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: TextBox(
               prefix: Container(
                   padding: const EdgeInsets.only(left: 12),
@@ -161,8 +182,8 @@ class BucketPage extends StatelessWidget {
           );
 
           List<Widget> allWidgets = state.status == BucketStatus.success
-              ? [pathWidget, filterBox, ...allTiles]
-              : [pathWidget, filterBox, progressWidget];
+              ? [toolbar, filterBox, ...allTiles]
+              : [toolbar, filterBox, progressWidget];
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
