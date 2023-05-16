@@ -20,6 +20,7 @@ jobs:
         with:
           flutter-version: '3.7.x'
           channel: 'stable'
+      - name: flutter version
         run: flutter --version
       - name: flutter pub get
         run: flutter pub get
