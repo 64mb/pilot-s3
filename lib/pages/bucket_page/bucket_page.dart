@@ -196,27 +196,6 @@ class BucketPage extends StatelessWidget {
             ),
           );
 
-          IconButton refreshButton = IconButton(
-              icon: const Icon(FluentIcons.refresh),
-              onPressed: () {
-                context
-                    .read<BucketPageBloc>()
-                    .add(ObjectsRequested(prefix: state.path.join('/')));
-              });
-
-          Container toolbar = Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                refreshButton,
-                const SizedBox(
-                  width: 16,
-                ),
-                pathWidget
-              ],
-            ),
-          );
-
           Container filterBox = Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: TextBox(
