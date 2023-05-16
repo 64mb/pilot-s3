@@ -137,7 +137,6 @@ class BucketPage extends StatelessWidget {
           if (state.path.isNotEmpty) allTiles.add(backTile);
           allTiles.addAll(directoriesWidgets);
           allTiles.addAll(objectsWidgets);
-
           Expanded pathWidget = Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -193,6 +192,27 @@ class BucketPage extends StatelessWidget {
                   width: 16,
                 ),
                 uploadButton,
+              ],
+            ),
+          );
+
+          IconButton refreshButton = IconButton(
+              icon: const Icon(FluentIcons.refresh),
+              onPressed: () {
+                context
+                    .read<BucketPageBloc>()
+                    .add(ObjectsRequested(prefix: state.path.join('/')));
+              });
+
+          Container toolbar = Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                refreshButton,
+                const SizedBox(
+                  width: 16,
+                ),
+                pathWidget
               ],
             ),
           );
