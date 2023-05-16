@@ -16,7 +16,7 @@ jobs:
       # - name: set up dart
       #   uses: dart-lang/setup-dart@v1
       - name: set up flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: '${{ env.FLUTTER_VERSION }}'
           channel: 'stable'
