@@ -13,6 +13,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path_lib;
+import 'package:pilot_s3/widgets/bucket_toolbar.dart';
 
 class BucketPage extends StatelessWidget {
   const BucketPage(
@@ -24,6 +25,26 @@ class BucketPage extends StatelessWidget {
   final Storage storage;
   final Connection connection;
   final Bucket bucket;
+
+  uploadObject(state, context) => () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+        if (result != null) {
+          File file = File(result.files.single.path!);
+          Minio minio = Minio(
+              endPoint: connection.endpoint,
+              accessKey: connection.accessKey,
+              secretKey: connection.secretKey);
+
+          String fileName = result.files.single.name;
+          String path = state.path.join('/');
+
+          String object = state.path.isNotEmpty ? '$path/$fileName' : fileName;
+
+          await minio.fPutObject(bucket.name, object, file.path);
+          context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
+        }
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -137,63 +158,15 @@ class BucketPage extends StatelessWidget {
           if (state.path.isNotEmpty) allTiles.add(backTile);
           allTiles.addAll(directoriesWidgets);
           allTiles.addAll(objectsWidgets);
-          Expanded pathWidget = Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child:
-                  Text('/$currentPath', style: const TextStyle(fontSize: 16)),
-            ),
-          );
 
-          IconButton refreshButton = IconButton(
-              icon: const Icon(FluentIcons.refresh),
-              onPressed: () {
-                context
-                    .read<BucketPageBloc>()
-                    .add(ObjectsRequested(prefix: state.path.join('/')));
-              });
-
-          IconButton uploadButton = IconButton(
-            icon: const Icon(FluentIcons.add),
-            onPressed: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-              if (result != null) {
-                File file = File(result.files.single.path!);
-                Minio minio = Minio(
-                    endPoint: connection.endpoint,
-                    accessKey: connection.accessKey,
-                    secretKey: connection.secretKey);
-
-                String fileName = result.files.single.name;
-                String path = state.path.join('/');
-
-                String object =
-                    state.path.isNotEmpty ? '$path/$fileName' : fileName;
-
-                await minio.fPutObject(bucket.name, object, file.path);
-                context
-                    .read<BucketPageBloc>()
-                    .add(ObjectsRequested(prefix: path));
-              }
+          BucketToolbar toolbar = BucketToolbar(
+            path: currentPath,
+            onRefresh: () {
+              context
+                  .read<BucketPageBloc>()
+                  .add(ObjectsRequested(prefix: state.path.join('/')));
             },
-          );
-
-          Container toolbar = Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                refreshButton,
-                const SizedBox(
-                  width: 16,
-                ),
-                pathWidget,
-                const SizedBox(
-                  width: 16,
-                ),
-                uploadButton,
-              ],
-            ),
+            onUpload: uploadObject(state, context),
           );
 
           Container filterBox = Container(
