@@ -11,7 +11,6 @@ import 'package:pilot_s3/storage.dart';
 import 'package:file_icon/file_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path_lib;
 import 'package:pilot_s3/widgets/bucket_toolbar.dart';
 
