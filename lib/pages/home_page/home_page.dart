@@ -7,6 +7,7 @@ import 'package:pilot_s3/pages/home_page/bloc/home_page_bloc.dart';
 import 'package:pilot_s3/pages/settings_page/settings_page.dart';
 import 'package:pilot_s3/pages/bucket_page/bucket_page.dart';
 import 'package:pilot_s3/storage.dart';
+import 'package:pilot_s3/widgets/home_dashboard.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.storage});
@@ -62,9 +63,12 @@ class HomePage extends StatelessWidget {
             PaneItemHeader(header: const Text('Menu')),
             PaneItemSeparator(),
             PaneItem(
-                icon: const Icon(FluentIcons.home),
-                title: const Text('Home'),
-                body: const Text('Home page')),
+              icon: const Icon(FluentIcons.home),
+              title: const Text('Home'),
+              body: HomeDashboard(
+                storage: storage,
+              ),
+            ),
           ];
 
           final List<Connection> connections = state.connections;

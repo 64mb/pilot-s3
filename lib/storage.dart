@@ -13,12 +13,8 @@ class Storage {
       StreamController<List<Connection>>();
   final StreamController<Map<String, List<Bucket>>> _bucketController =
       StreamController<Map<String, List<Bucket>>>();
-  final StreamController<ListObjectsResult> _objectController =
-      StreamController<ListObjectsResult>();
 
-  final Map<String, StreamController<ListObjectsResult>> _objectControllers =
-      {};
-  late Box<Connection> _box;
+  Box<Connection>? _box;
 
   Storage() {
     _init();
@@ -36,10 +32,14 @@ class Storage {
     Hive.init(configPath.path);
     Hive.registerAdapter(ConnectionAdapter());
     _box = await Hive.openBox<Connection>('Connections');
-    final connectionList = _box.values.toList();
-    _controller.add(connectionList);
-    final Map<String, List<Bucket>> buckets = await getBuckets(connectionList);
-    _bucketController.add(buckets);
+
+    if (_box != null) {
+      final connectionList = _box!.values.toList();
+      _controller.add(connectionList);
+      final Map<String, List<Bucket>> buckets =
+          await getBuckets(connectionList);
+      _bucketController.add(buckets);
+    }
   }
 
   Stream<List<Connection>> getConnectionStream() => _controller.stream;
@@ -47,19 +47,20 @@ class Storage {
       _bucketController.stream;
 
   void saveConnection(Connection connection) async {
-    Map<dynamic, Connection> connectionMap = _box.toMap();
+    if (_box == null) return;
+    Map<dynamic, Connection> connectionMap = _box!.toMap();
     final connectionKey = connectionMap.keys.firstWhere(
       (k) => connectionMap[k]?.accessKey == connection.accessKey,
       orElse: () => null,
     );
 
     if (connectionKey != null) {
-      _box.put(connectionKey, connection);
+      _box!.put(connectionKey, connection);
     } else {
-      _box.add(connection);
+      _box!.add(connection);
     }
 
-    List<Connection> connectionList = _box.values.toList();
+    List<Connection> connectionList = _box!.values.toList();
     _controller.add(connectionList);
     Map<String, List<Bucket>> buckets = await getBuckets(connectionList);
     _bucketController.add(buckets);
@@ -93,13 +94,14 @@ class Storage {
   }
 
   void deleteConnection(Connection connection) {
-    Map<dynamic, Connection> connectionMap = _box.toMap();
+    if (_box == null) return;
+    Map<dynamic, Connection> connectionMap = _box!.toMap();
     final connectionKey = connectionMap.keys.firstWhere(
       (k) => connectionMap[k]?.accessKey == connection.accessKey,
       orElse: () => null,
     );
-    _box.delete(connectionKey);
-    List<Connection> connectionList = _box.values.toList();
+    _box!.delete(connectionKey);
+    List<Connection> connectionList = _box!.values.toList();
     _controller.add(connectionList);
   }
 
@@ -112,5 +114,30 @@ class Storage {
 
     String formattedPrefix = prefix == '' ? prefix : '$prefix/';
     return await minio.listAllObjectsV2(bucket, prefix: formattedPrefix);
+  }
+
+  int getConnectionCount() {
+    if (_box == null) return 0;
+    return _box!.values.toList().length;
+  }
+
+  Future<int> getBucketCount() async {
+    int count = 0;
+    if (_box == null) return count;
+    List<Connection> connections = _box!.values.toList();
+    Map<String, List<Bucket>> buckets = await getBuckets(connections);
+
+    for (final bucketsList in buckets.values) {
+      count += bucketsList.length;
+    }
+    return count;
+  }
+
+  Future<Map<String, int>> getDashboardStatistic() async {
+    Map<String, int> statistic = {};
+    statistic['connections'] = getConnectionCount();
+    statistic['buckets'] = await getBucketCount();
+
+    return statistic;
   }
 }
