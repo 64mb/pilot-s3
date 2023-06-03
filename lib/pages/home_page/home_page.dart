@@ -39,6 +39,9 @@ class HomePage extends StatelessWidget {
             onDeletePressed: () {
               storage.deleteConnection(connection);
             },
+            onEditPressed: () {
+              storage.editConnection(connection);
+            },
           ),
           items: bucketItems,
           icon: const Icon(FluentIcons.add_connection)));

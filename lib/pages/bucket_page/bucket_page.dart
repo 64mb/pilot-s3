@@ -66,8 +66,7 @@ class BucketPage extends StatelessWidget {
           List<Object>? objects = state.items.objects;
           List<ListTile>? directoriesWidgets = [];
 
-          directories.forEach(
-            (directory) {
+          for (var directory in directories) {
               List<String> splittedPrefix = directory.split('/');
               String? directoryName = splittedPrefix.length > 2
                   ? splittedPrefix[splittedPrefix.length - 2]
@@ -89,12 +88,10 @@ class BucketPage extends StatelessWidget {
                   },
                 ));
               }
-            },
-          );
+            }
           List<ListTile>? objectsWidgets = [];
 
-          objects.forEach(
-            (object) {
+          for (var object in objects) {
               String? objectName = object.key?.split('/').last;
               if (objectName != '' &&
                   objectName != null &&
@@ -139,8 +136,7 @@ class BucketPage extends StatelessWidget {
                   },
                 ));
               }
-            },
-          );
+            }
           List<ListTile> allTiles = [];
           ListTile backTile = ListTile(
             title: const Text('Back'),

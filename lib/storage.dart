@@ -24,7 +24,7 @@ class Storage {
     final appDir = await path_provider.getApplicationDocumentsDirectory();
     final documentPath =
         Platform.isLinux ? path.join(appDir.path, '.config') : appDir.path;
-    final folderName = Platform.isLinux ? "pilot-s3" : "PilotS3";
+    final folderName = Platform.isLinux ? 'pilot-s3' : 'PilotS3';
     final configPath = Directory(path.join(documentPath, folderName));
     if (!(await configPath.exists())) {
       configPath.create(recursive: true);
@@ -104,6 +104,8 @@ class Storage {
     List<Connection> connectionList = _box!.values.toList();
     _controller.add(connectionList);
   }
+
+  void editConnection(Connection connection) {}
 
   Future<ListObjectsResult> getObjects(Connection connection, String bucket,
       {String prefix = '', bool recursive = false, String? startAfter}) async {
