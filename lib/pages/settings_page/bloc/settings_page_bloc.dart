@@ -23,6 +23,7 @@ class SettingsPageBloc extends Bloc<SettingsPageEvent, SettingsPageState> {
     NameChanged event,
     Emitter<SettingsPageState> emit,
   ) {
+    print('name changed ${event.name}');
     emit(state.copyWith(name: event.name));
   }
 
@@ -58,8 +59,12 @@ class SettingsPageBloc extends Bloc<SettingsPageEvent, SettingsPageState> {
     AddSubmitted event,
     Emitter<SettingsPageState> emit,
   ) {
-    Connection connection = Connection(state.name, state.endpoint,
-        state.accessKey, state.secretKey, state.bucket);
+    Connection connection = Connection(
+        name: state.name,
+        endpoint: state.endpoint,
+        accessKey: state.accessKey,
+        secretKey: state.secretKey,
+        bucket: state.bucket);
     storage.saveConnection(connection);
   }
 }
