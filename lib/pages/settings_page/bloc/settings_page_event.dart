@@ -65,3 +65,13 @@ class AddSubmitted extends SettingsPageEvent {
   @override
   List<Object?> get props => [];
 }
+
+@immutable
+class ConnectionChanged extends SettingsPageEvent {
+  const ConnectionChanged({required this.connection});
+
+  final Connection connection;
+
+  @override
+  List<Object?> get props => [connection];
+}

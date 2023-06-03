@@ -9,12 +9,12 @@ class SettingsPage extends StatelessWidget {
   const SettingsPage(
       {super.key,
       this.connection = const Connection(),
-      this.add = true,
+      this.edit = false,
       required this.storage});
 
   final Connection connection;
   final Storage storage;
-  final bool add;
+  final bool edit;
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +24,7 @@ class SettingsPage extends StatelessWidget {
           builder: ((context, state) {
         context
             .read<SettingsPageBloc>()
-            .add(NameChanged(name: connection.name));
-        context
-            .read<SettingsPageBloc>()
-            .add(EndpointChanged(endpoint: connection.endpoint));
-        context
-            .read<SettingsPageBloc>()
-            .add(AccessKeyChanged(accessKey: connection.accessKey));
-        context
-            .read<SettingsPageBloc>()
-            .add(SecretKeyChanged(secretKey: connection.secretKey));
-        context
-            .read<SettingsPageBloc>()
-            .add(BucketChanged(bucket: connection.bucket));
+            .add(ConnectionChanged(connection: connection));
         return SizedBox(
           width: 100,
           child: Padding(
@@ -99,16 +87,40 @@ class SettingsPage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  Button(
-                    child: add
-                        ? const Text('Add connection')
-                        : const Text('Save connection'),
-                    onPressed: () async {
-                      context
-                          .read<SettingsPageBloc>()
-                          .add(const AddSubmitted());
-                    },
-                  ),
+                  edit
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                              Button(
+                                child: const Text('Delete connection'),
+                                onPressed: () async {
+                                  storage.deleteConnection(connection);
+                                },
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Button(
+                                child: const Text('Save connection'),
+                                onPressed: () async {
+                                  context
+                                      .read<SettingsPageBloc>()
+                                      .add(const AddSubmitted());
+                                },
+                              ),
+                            ])
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                              Button(
+                                child: const Text('Add connection'),
+                                onPressed: () async {
+                                  context
+                                      .read<SettingsPageBloc>()
+                                      .add(const AddSubmitted());
+                                },
+                              ),
+                            ])
                 ],
               )),
         );

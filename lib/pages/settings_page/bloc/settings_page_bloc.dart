@@ -15,6 +15,7 @@ class SettingsPageBloc extends Bloc<SettingsPageEvent, SettingsPageState> {
     on<BucketChanged>(_onBucketChanged);
     on<EndpointChanged>(_onEndpointChanged);
     on<AddSubmitted>(_onAddSubmitted);
+    on<ConnectionChanged>(_onConnectionChanged);
   }
 
   final Storage storage;
@@ -23,7 +24,6 @@ class SettingsPageBloc extends Bloc<SettingsPageEvent, SettingsPageState> {
     NameChanged event,
     Emitter<SettingsPageState> emit,
   ) {
-    print('name changed ${event.name}');
     emit(state.copyWith(name: event.name));
   }
 
@@ -60,11 +60,25 @@ class SettingsPageBloc extends Bloc<SettingsPageEvent, SettingsPageState> {
     Emitter<SettingsPageState> emit,
   ) {
     Connection connection = Connection(
-        name: state.name,
-        endpoint: state.endpoint,
-        accessKey: state.accessKey,
-        secretKey: state.secretKey,
-        bucket: state.bucket);
-    storage.saveConnection(connection);
+        name: state.name != '' ? state.name : state.connection.name,
+        endpoint:
+            state.endpoint != '' ? state.endpoint : state.connection.endpoint,
+        accessKey: state.accessKey != ''
+            ? state.accessKey
+            : state.connection.accessKey,
+        secretKey: state.secretKey != ''
+            ? state.secretKey
+            : state.connection.secretKey,
+        bucket: (state.bucket ?? '') != ''
+            ? state.bucket
+            : state.connection.bucket);
+    storage.saveConnection(state.connection.accessKey, connection);
+  }
+
+  void _onConnectionChanged(
+    ConnectionChanged event,
+    Emitter<SettingsPageState> emit,
+  ) {
+    emit(state.copyWith(connection: event.connection));
   }
 }
