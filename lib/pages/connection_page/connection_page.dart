@@ -17,14 +17,15 @@ class ConnectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
         child: Padding(
-      padding: const EdgeInsets.only(top: 40, left: 30, right: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       child: Column(
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
-                initialValue: connection.name,
+              TextField(
+                controller: TextEditingController(
+                    text: "Complete the story from here..."),
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: 'Connection name'),
               ),
