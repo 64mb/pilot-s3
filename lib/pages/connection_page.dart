@@ -7,17 +7,17 @@ class ConnectionPage extends StatelessWidget {
       {super.key,
       required this.connection,
       this.onDeletePressed,
-      this.onEditPressed});
+      this.onSavePressed});
 
   final Connection connection;
   final Function()? onDeletePressed;
-  final Function()? onEditPressed;
+  final Function()? onSavePressed;
 
   @override
   Widget build(BuildContext context) {
     return Material(
         child: Padding(
-      padding: const EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.only(top: 40, left: 30, right: 30),
       child: Column(
         children: [
           Column(
@@ -75,10 +75,12 @@ class ConnectionPage extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Button(
-                onPressed: onEditPressed,
-                child: const Text('Save connection'),
-              ),
+              IgnorePointer(
+                  ignoring: true,
+                  child: Button(
+                    onPressed: onSavePressed,
+                    child: const Text('Save connection'),
+                  )),
             ],
           )
         ],

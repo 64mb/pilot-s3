@@ -100,6 +100,7 @@ class Storage {
       (k) => connectionMap[k]?.accessKey == connection.accessKey,
       orElse: () => null,
     );
+    if (connectionKey == null) return;
     _box!.delete(connectionKey);
     List<Connection> connectionList = _box!.values.toList();
     _controller.add(connectionList);

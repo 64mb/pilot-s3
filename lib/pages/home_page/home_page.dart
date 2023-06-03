@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
             onDeletePressed: () {
               storage.deleteConnection(connection);
             },
-            onEditPressed: () {
+            onSavePressed: () {
               storage.editConnection(connection);
             },
           ),
