@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:pilot_s3/storage.dart';
-import 'settings_page_bloc.dart';
+import 'package:pilot_s3/pages/settings_page/bloc/settings_page_bloc.dart';
 import 'package:pilot_s3/models/connection.dart';
 
 class ConnectionPageBloc extends SettingsPageBloc {
