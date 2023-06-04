@@ -4,8 +4,8 @@ import 'package:pilot_s3/pages/home_page/home_page.dart';
 import 'package:pilot_s3/storage.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Storage storage = Storage();
-
   runApp(MyApp(
     storage: storage,
   ));
