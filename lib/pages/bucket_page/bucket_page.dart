@@ -59,6 +59,7 @@ class BucketPage extends StatelessWidget {
           await minio.fGetObject(bucket.name, object.key!,
               path_lib.join(selectedDirectory, path_lib.basename(object.key!)));
 
+          if (!context.mounted) return;
           displayInfoBar(context, builder: (context, close) {
             return InfoBar(
               title: const Text('File downloaded'),
