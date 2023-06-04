@@ -89,8 +89,17 @@ class BucketPage extends StatelessWidget {
                     size: 22,
                   )
                 ]),
+                subtitle: Text(
+                  object.lastModified.toString().split('.')[0],
+                  style: const TextStyle(
+                      fontSize: 10, color: Color.fromARGB(255, 150, 150, 150)),
+                ),
                 trailing:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(sizeText(object.size ?? 0)),
+                  const SizedBox(
+                    width: 20,
+                  ),
                   IconButton(
                       icon: const Icon(FluentIcons.delete),
                       onPressed: () {},

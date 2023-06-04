@@ -7,9 +7,9 @@ class StateIconCircle extends StatefulWidget {
 }
 
 class _StateIconCircle extends State<StateIconCircle> {
-  Icon first_state = Icon(FluentIcons.circle_ring);
-  Icon second_state = Icon(FluentIcons.circle_fill);
-  Icon current_state = Icon(FluentIcons.circle_ring);
+  Icon first_state = const Icon(FluentIcons.circle_ring);
+  Icon second_state = const Icon(FluentIcons.circle_fill);
+  Icon current_state = const Icon(FluentIcons.circle_ring);
   @override
   Widget build(BuildContext context) {
     return IconButton(
