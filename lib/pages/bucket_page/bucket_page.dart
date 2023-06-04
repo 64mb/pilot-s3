@@ -14,6 +14,33 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path_lib;
 import 'package:pilot_s3/widgets/bucket_toolbar.dart';
 
+class StateIconCircle extends StatefulWidget {
+  const StateIconCircle({super.key});
+  @override
+  State<StateIconCircle> createState() => _StateIconCircle();
+}
+
+class _StateIconCircle extends State<StateIconCircle> {
+  Icon first_state = Icon(FluentIcons.circle_ring);
+  Icon second_state = Icon(FluentIcons.circle_fill);
+  Icon current_state = Icon(FluentIcons.circle_ring);
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon: current_state,
+        onPressed: () {},
+        onTapDown: () {
+          setState(() {
+            if (current_state != second_state) {
+              current_state = second_state;
+            } else {
+              current_state = first_state;
+            }
+          });
+        });
+  }
+}
+
 class BucketPage extends StatelessWidget {
   const BucketPage(
       {super.key,
@@ -24,6 +51,20 @@ class BucketPage extends StatelessWidget {
   final Storage storage;
   final Connection connection;
   final Bucket bucket;
+
+  displayAction(BuildContext context, Text waht, Text that) => () {
+        displayInfoBar(context, builder: (context, close) {
+          return InfoBar(
+            title: waht,
+            content: that,
+            action: IconButton(
+              icon: const Icon(FluentIcons.clear),
+              onPressed: close,
+            ),
+            severity: InfoBarSeverity.success,
+          );
+        });
+      };
 
   uploadObject(state, BuildContext context) => () async {
         FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -43,6 +84,7 @@ class BucketPage extends StatelessWidget {
           await minio.fPutObject(bucket.name, object, file.path);
           if (context.mounted) {
             context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
+            displayAction(context, const Text('File uploaded'), Text(object))();
           }
         }
       };
@@ -61,18 +103,26 @@ class BucketPage extends StatelessWidget {
               path_lib.join(selectedDirectory, path_lib.basename(object.key!)));
 
           if (context.mounted) {
-            displayInfoBar(context, builder: (context, close) {
-              return InfoBar(
-                title: const Text('File downloaded'),
-                content: Text(object.key!),
-                action: IconButton(
-                  icon: const Icon(FluentIcons.clear),
-                  onPressed: close,
-                ),
-                severity: InfoBarSeverity.success,
-              );
-            });
+            displayAction(
+                context, const Text('File downloaded'), Text(object.key!))();
           }
+        }
+      };
+
+  deleteObject(object, BuildContext context, state) => () async {
+        Minio minio = Minio(
+            endPoint: connection.endpoint,
+            accessKey: connection.accessKey,
+            secretKey: connection.secretKey);
+
+        await minio.removeObject(bucket.name, object.key!);
+
+        if (context.mounted) {
+          displayAction(
+              context, const Text('File deleted'), Text(object.key!))();
+          context
+              .read<BucketPageBloc>()
+              .add(ObjectsRequested(prefix: state.path.join('/')));
         }
       };
 
@@ -128,13 +178,29 @@ class BucketPage extends StatelessWidget {
                 objectName != null &&
                 objectName.contains(state.filter)) {
               objectsWidgets.add(ListTile(
-                leading: FileIcon(
-                  objectName,
-                  size: 22,
-                ),
-                trailing: const Icon(FluentIcons.download),
                 title: Text(objectName),
-                onPressed: downloadObject(object, context),
+                leading:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  const StateIconCircle(),
+                  FileIcon(
+                    objectName,
+                    size: 22,
+                  )
+                ]),
+                trailing:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  IconButton(
+                      icon: const Icon(FluentIcons.delete),
+                      onPressed: () {},
+                      onTapDown: deleteObject(object, context, state)),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                      icon: const Icon(FluentIcons.download),
+                      onPressed: () {},
+                      onTapDown: downloadObject(object, context)),
+                ]),
               ));
             }
           });
