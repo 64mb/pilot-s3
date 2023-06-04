@@ -1,18 +1,18 @@
 part of 'bucket_page.dart';
 
-displayAction(BuildContext context, Text waht, Text that) => () {
-      displayInfoBar(context, builder: (context, close) {
-        return InfoBar(
-          title: waht,
-          content: that,
-          action: IconButton(
-            icon: const Icon(FluentIcons.clear),
-            onPressed: close,
-          ),
-          severity: InfoBarSeverity.success,
-        );
-      });
-    };
+displayAction(BuildContext context, Text waht, Text that) {
+  displayInfoBar(context, builder: (context, close) {
+    return InfoBar(
+      title: waht,
+      content: that,
+      action: IconButton(
+        icon: const Icon(FluentIcons.clear),
+        onPressed: close,
+      ),
+      severity: InfoBarSeverity.success,
+    );
+  });
+}
 
 deleteObject(object, connection, bucket, BuildContext context, state) =>
     () async {
@@ -24,7 +24,7 @@ deleteObject(object, connection, bucket, BuildContext context, state) =>
       await minio.removeObject(bucket.name, object.key!);
 
       if (!context.mounted) return;
-      displayAction(context, const Text('File deleted'), Text(object.key!))();
+      displayAction(context, const Text('File deleted'), Text(object.key!));
       context
           .read<BucketPageBloc>()
           .add(ObjectsRequested(prefix: state.path.join('/')));
@@ -48,7 +48,7 @@ uploadObject(state, connection, bucket, BuildContext context) => () async {
         await minio.fPutObject(bucket.name, object, file.path);
         if (!context.mounted) return;
         context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
-        displayAction(context, const Text('File uploaded'), Text(fileName))();
+        displayAction(context, const Text('File uploaded'), Text(fileName));
       }
     };
 
@@ -67,6 +67,6 @@ downloadObject(object, connection, bucket, BuildContext context) => () async {
 
         if (!context.mounted) return;
         displayAction(
-            context, const Text('File downloaded'), Text(object.key!))();
+            context, const Text('File downloaded'), Text(object.key!));
       }
     };
