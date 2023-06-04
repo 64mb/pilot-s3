@@ -25,7 +25,7 @@ class BucketPage extends StatelessWidget {
   final Connection connection;
   final Bucket bucket;
 
-  uploadObject(state, context) => () async {
+  uploadObject(state, BuildContext context) => () async {
         FilePickerResult? result = await FilePicker.platform.pickFiles();
 
         if (result != null) {
@@ -41,7 +41,35 @@ class BucketPage extends StatelessWidget {
           String object = state.path.isNotEmpty ? '$path/$fileName' : fileName;
 
           await minio.fPutObject(bucket.name, object, file.path);
+          if (!context.mounted) return;
           context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
+        }
+      };
+
+  downloadObject(object, BuildContext context) => () async {
+        var downloadDir = await path_provider.getDownloadsDirectory();
+        String? selectedDirectory = await FilePicker.platform
+            .getDirectoryPath(initialDirectory: downloadDir?.path ?? '/');
+        if (selectedDirectory != null) {
+          Minio minio = Minio(
+              endPoint: connection.endpoint,
+              accessKey: connection.accessKey,
+              secretKey: connection.secretKey);
+
+          await minio.fGetObject(bucket.name, object.key!,
+              path_lib.join(selectedDirectory, path_lib.basename(object.key!)));
+
+          displayInfoBar(context, builder: (context, close) {
+            return InfoBar(
+              title: const Text('File downloaded'),
+              content: Text(object.key!),
+              action: IconButton(
+                icon: const Icon(FluentIcons.clear),
+                onPressed: close,
+              ),
+              severity: InfoBarSeverity.success,
+            );
+          });
         }
       };
 
@@ -67,76 +95,46 @@ class BucketPage extends StatelessWidget {
           List<ListTile>? directoriesWidgets = [];
 
           for (var directory in directories) {
-              List<String> splittedPrefix = directory.split('/');
-              String? directoryName = splittedPrefix.length > 2
-                  ? splittedPrefix[splittedPrefix.length - 2]
-                  : splittedPrefix[0];
-              List<String> newPath = [...state.path];
-              newPath.add(directoryName);
+            List<String> splittedPrefix = directory.split('/');
+            String? directoryName = splittedPrefix.length > 2
+                ? splittedPrefix[splittedPrefix.length - 2]
+                : splittedPrefix[0];
+            List<String> newPath = [...state.path];
+            newPath.add(directoryName);
 
-              if (directoryName.contains(state.filter)) {
-                directoriesWidgets.add(ListTile(
-                  leading: const Icon(FluentIcons.folder_horizontal),
-                  title: Text(directoryName.replaceAll('/', '')),
-                  onPressed: () {
-                    context
-                        .read<BucketPageBloc>()
-                        .add(DirectoryAdded(path: newPath));
-                    context
-                        .read<BucketPageBloc>()
-                        .add(ObjectsRequested(prefix: newPath.join('/')));
-                  },
-                ));
-              }
+            if (directoryName.contains(state.filter)) {
+              directoriesWidgets.add(ListTile(
+                leading: const Icon(FluentIcons.folder_horizontal),
+                title: Text(directoryName.replaceAll('/', '')),
+                onPressed: () {
+                  context
+                      .read<BucketPageBloc>()
+                      .add(DirectoryAdded(path: newPath));
+                  context
+                      .read<BucketPageBloc>()
+                      .add(ObjectsRequested(prefix: newPath.join('/')));
+                },
+              ));
             }
+          }
           List<ListTile>? objectsWidgets = [];
 
           for (var object in objects) {
-              String? objectName = object.key?.split('/').last;
-              if (objectName != '' &&
-                  objectName != null &&
-                  objectName.contains(state.filter)) {
-                objectsWidgets.add(ListTile(
-                  leading: FileIcon(
-                    objectName,
-                    size: 22,
-                  ),
-                  trailing: const Icon(FluentIcons.download),
-                  title: Text(objectName),
-                  onPressed: () async {
-                    var downloadDir =
-                        await path_provider.getDownloadsDirectory();
-                    String? selectedDirectory = await FilePicker.platform
-                        .getDirectoryPath(
-                            initialDirectory: downloadDir?.path ?? '/');
-                    if (selectedDirectory != null) {
-                      Minio minio = Minio(
-                          endPoint: connection.endpoint,
-                          accessKey: connection.accessKey,
-                          secretKey: connection.secretKey);
-
-                      await minio.fGetObject(
-                          bucket.name,
-                          object.key!,
-                          path_lib.join(selectedDirectory,
-                              path_lib.basename(object.key!)));
-
-                      displayInfoBar(context, builder: (context, close) {
-                        return InfoBar(
-                          title: const Text('File downloaded'),
-                          content: Text(object.key!),
-                          action: IconButton(
-                            icon: const Icon(FluentIcons.clear),
-                            onPressed: close,
-                          ),
-                          severity: InfoBarSeverity.success,
-                        );
-                      });
-                    }
-                  },
-                ));
-              }
+            String? objectName = object.key?.split('/').last;
+            if (objectName != '' &&
+                objectName != null &&
+                objectName.contains(state.filter)) {
+              objectsWidgets.add(ListTile(
+                leading: FileIcon(
+                  objectName,
+                  size: 22,
+                ),
+                trailing: const Icon(FluentIcons.download),
+                title: Text(objectName),
+                onPressed: downloadObject(object, context),
+              ));
             }
+          }
           List<ListTile> allTiles = [];
           ListTile backTile = ListTile(
             title: const Text('Back'),
