@@ -14,6 +14,9 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path_lib;
 import 'package:pilot_s3/widgets/bucket_toolbar.dart';
 
+part 'bucket_page_elements.dart';
+part 'bucket_page_calls.dart';
+
 class BucketPage extends StatelessWidget {
   const BucketPage(
       {super.key,
@@ -24,26 +27,6 @@ class BucketPage extends StatelessWidget {
   final Storage storage;
   final Connection connection;
   final Bucket bucket;
-
-  uploadObject(state, context) => () async {
-        FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-        if (result != null) {
-          File file = File(result.files.single.path!);
-          Minio minio = Minio(
-              endPoint: connection.endpoint,
-              accessKey: connection.accessKey,
-              secretKey: connection.secretKey);
-
-          String fileName = result.files.single.name;
-          String path = state.path.join('/');
-
-          String object = state.path.isNotEmpty ? '$path/$fileName' : fileName;
-
-          await minio.fPutObject(bucket.name, object, file.path);
-          context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
-        }
-      };
 
   @override
   Widget build(BuildContext context) {
@@ -66,81 +49,74 @@ class BucketPage extends StatelessWidget {
           List<Object>? objects = state.items.objects;
           List<ListTile>? directoriesWidgets = [];
 
-          directories.forEach(
-            (directory) {
-              List<String> splittedPrefix = directory.split('/');
-              String? directoryName = splittedPrefix.length > 2
-                  ? splittedPrefix[splittedPrefix.length - 2]
-                  : splittedPrefix[0];
-              List<String> newPath = [...state.path];
-              newPath.add(directoryName);
+          directories.forEach((directory) {
+            List<String> splittedPrefix = directory.split('/');
+            String? directoryName = splittedPrefix.length > 2
+                ? splittedPrefix[splittedPrefix.length - 2]
+                : splittedPrefix[0];
+            List<String> newPath = [...state.path];
+            newPath.add(directoryName);
 
-              if (directoryName.contains(state.filter)) {
-                directoriesWidgets.add(ListTile(
-                  leading: const Icon(FluentIcons.folder_horizontal),
-                  title: Text(directoryName.replaceAll('/', '')),
-                  onPressed: () {
-                    context
-                        .read<BucketPageBloc>()
-                        .add(DirectoryAdded(path: newPath));
-                    context
-                        .read<BucketPageBloc>()
-                        .add(ObjectsRequested(prefix: newPath.join('/')));
-                  },
-                ));
-              }
-            },
-          );
+            if (directoryName.contains(state.filter)) {
+              directoriesWidgets.add(ListTile(
+                leading: const Icon(FluentIcons.folder_horizontal),
+                title: Text(directoryName.replaceAll('/', '')),
+                onPressed: () {
+                  context
+                      .read<BucketPageBloc>()
+                      .add(DirectoryAdded(path: newPath));
+                  context
+                      .read<BucketPageBloc>()
+                      .add(ObjectsRequested(prefix: newPath.join('/')));
+                },
+              ));
+            }
+          });
           List<ListTile>? objectsWidgets = [];
 
-          objects.forEach(
-            (object) {
-              String? objectName = object.key?.split('/').last;
-              if (objectName != '' &&
-                  objectName != null &&
-                  objectName.contains(state.filter)) {
-                objectsWidgets.add(ListTile(
-                  leading: FileIcon(
+          objects.forEach((object) {
+            String? objectName = object.key?.split('/').last;
+            if (objectName != '' &&
+                objectName != null &&
+                objectName.contains(state.filter)) {
+              objectsWidgets.add(ListTile(
+                title: Text(objectName),
+                leading:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  const StateIconCircle(),
+                  FileIcon(
                     objectName,
                     size: 22,
+                  )
+                ]),
+                subtitle: Text(
+                  object.lastModified.toString().split('.')[0],
+                  style: const TextStyle(
+                      fontSize: 10, color: Color.fromARGB(255, 150, 150, 150)),
+                ),
+                trailing:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(sizeText(object.size ?? 0)),
+                  const SizedBox(
+                    width: 20,
                   ),
-                  trailing: const Icon(FluentIcons.download),
-                  title: Text(objectName),
-                  onPressed: () async {
-                    var downloadDir =
-                        await path_provider.getDownloadsDirectory();
-                    String? selectedDirectory = await FilePicker.platform
-                        .getDirectoryPath(
-                            initialDirectory: downloadDir?.path ?? '/');
-                    if (selectedDirectory != null) {
-                      Minio minio = Minio(
-                          endPoint: connection.endpoint,
-                          accessKey: connection.accessKey,
-                          secretKey: connection.secretKey);
-
-                      await minio.fGetObject(
-                          bucket.name,
-                          object.key!,
-                          path_lib.join(selectedDirectory,
-                              path_lib.basename(object.key!)));
-
-                      displayInfoBar(context, builder: (context, close) {
-                        return InfoBar(
-                          title: const Text('File downloaded'),
-                          content: Text(object.key!),
-                          action: IconButton(
-                            icon: const Icon(FluentIcons.clear),
-                            onPressed: close,
-                          ),
-                          severity: InfoBarSeverity.success,
-                        );
-                      });
-                    }
-                  },
-                ));
-              }
-            },
-          );
+                  IconButton(
+                      icon: const Icon(FluentIcons.delete),
+                      onPressed: () {},
+                      onTapDown: deleteObject(
+                          object, connection, bucket, context, state)),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                      icon: const Icon(FluentIcons.download),
+                      onPressed: () {},
+                      onTapDown:
+                          downloadObject(object, connection, bucket, context)),
+                ]),
+              ));
+            }
+          });
           List<ListTile> allTiles = [];
           ListTile backTile = ListTile(
             title: const Text('Back'),
@@ -165,7 +141,7 @@ class BucketPage extends StatelessWidget {
                   .read<BucketPageBloc>()
                   .add(ObjectsRequested(prefix: state.path.join('/')));
             },
-            onUpload: uploadObject(state, context),
+            onUpload: uploadObject(state, connection, bucket, context),
           );
 
           Container filterBox = Container(

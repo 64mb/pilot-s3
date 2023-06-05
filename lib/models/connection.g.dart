@@ -17,11 +17,11 @@ class ConnectionAdapter extends TypeAdapter<Connection> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Connection(
-      fields[3] as String,
-      fields[0] as String,
-      fields[1] as String,
-      fields[2] as String,
-      fields[4] as String?,
+      name: fields[3] as String,
+      endpoint: fields[0] as String,
+      accessKey: fields[1] as String,
+      secretKey: fields[2] as String,
+      bucket: fields[4] as String?,
     );
   }
 
