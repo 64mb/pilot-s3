@@ -8,6 +8,7 @@ class SettingsPageState extends Equatable {
     this.secretKey = '',
     this.endpoint = '',
     this.bucket,
+    this.connection = const Connection(),
   });
 
   final String name;
@@ -15,6 +16,7 @@ class SettingsPageState extends Equatable {
   final String secretKey;
   final String endpoint;
   final String? bucket;
+  final Connection connection;
 
   SettingsPageState copyWith({
     String? name,
@@ -22,6 +24,7 @@ class SettingsPageState extends Equatable {
     String? secretKey,
     String? endpoint,
     String? bucket,
+    Connection? connection,
   }) {
     return SettingsPageState(
       name: name ?? this.name,
@@ -29,9 +32,11 @@ class SettingsPageState extends Equatable {
       secretKey: secretKey ?? this.secretKey,
       endpoint: endpoint ?? this.endpoint,
       bucket: bucket ?? this.bucket,
+      connection: connection ?? this.connection,
     );
   }
 
   @override
-  List<Object?> get props => [name, accessKey, secretKey, endpoint, bucket];
+  List<Object?> get props =>
+      [name, accessKey, secretKey, endpoint, bucket, connection];
 }

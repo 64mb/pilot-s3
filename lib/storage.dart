@@ -24,7 +24,7 @@ class Storage {
     final appDir = await path_provider.getApplicationDocumentsDirectory();
     final documentPath =
         Platform.isLinux ? path.join(appDir.path, '.config') : appDir.path;
-    final folderName = Platform.isLinux ? "pilot-s3" : "PilotS3";
+    final folderName = Platform.isLinux ? 'pilot-s3' : 'PilotS3';
     final configPath = Directory(path.join(documentPath, folderName));
     if (!(await configPath.exists())) {
       configPath.create(recursive: true);
@@ -46,11 +46,11 @@ class Storage {
   Stream<Map<String, List<Bucket>>> getBucketStream() =>
       _bucketController.stream;
 
-  void saveConnection(Connection connection) async {
+  void saveConnection(String accessKey, Connection connection) async {
     if (_box == null) return;
     Map<dynamic, Connection> connectionMap = _box!.toMap();
     final connectionKey = connectionMap.keys.firstWhere(
-      (k) => connectionMap[k]?.accessKey == connection.accessKey,
+      (k) => connectionMap[k]?.accessKey == accessKey,
       orElse: () => null,
     );
 
@@ -100,10 +100,13 @@ class Storage {
       (k) => connectionMap[k]?.accessKey == connection.accessKey,
       orElse: () => null,
     );
+    if (connectionKey == null) return;
     _box!.delete(connectionKey);
     List<Connection> connectionList = _box!.values.toList();
     _controller.add(connectionList);
   }
+
+  void editConnection(Connection connection) {}
 
   Future<ListObjectsResult> getObjects(Connection connection, String bucket,
       {String prefix = '', bool recursive = false, String? startAfter}) async {
