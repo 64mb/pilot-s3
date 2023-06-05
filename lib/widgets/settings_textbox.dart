@@ -1,27 +1,21 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 
-class SettingsCheckbox extends StatelessWidget {
-  const SettingsCheckbox({super.key, this.label = '', required this.onChanged});
+class SettingsTextBox extends StatelessWidget {
+  const SettingsTextBox(
+      {super.key, this.label = '', this.value = '', required this.onChanged});
 
   final String label;
+  final String value;
   final Function(String) onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return TextBox(
+    return Material(
+        child: TextFormField(
       onChanged: onChanged,
-      prefix: Row(children: [
-        const SizedBox(
-          width: 12,
-        ),
-        SizedBox(
-          width: 100,
-          child: Text(label),
-        ),
-        const SizedBox(
-          width: 12,
-        )
-      ]),
-    );
+      initialValue: value,
+      decoration:
+          InputDecoration(border: const OutlineInputBorder(), labelText: label),
+    ));
   }
 }

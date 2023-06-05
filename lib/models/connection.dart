@@ -15,6 +15,10 @@ class Connection {
   @HiveField(4)
   final String? bucket;
 
-  Connection(
-      this.name, this.endpoint, this.accessKey, this.secretKey, this.bucket);
+  const Connection(
+      {this.name = '',
+      this.endpoint = '',
+      this.accessKey = '',
+      this.secretKey = '',
+      this.bucket = ''});
 }
