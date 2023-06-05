@@ -16,6 +16,44 @@ class SettingsPage extends StatelessWidget {
   final Storage storage;
   final bool edit;
 
+  Row getEditButtons(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Button(
+        child: const Text('Delete connection'),
+        onPressed: () async {
+          storage.deleteConnection(connection);
+        },
+      ),
+      const SizedBox(
+        width: 20,
+      ),
+      Button(
+        child: const Text('Save connection'),
+        onPressed: () async {
+          context.read<SettingsPageBloc>().add(const AddSubmitted());
+        },
+      ),
+    ]);
+  }
+
+  Row getCreateButtons(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Button(
+        child: const Text('Add connection'),
+        onPressed: () async {
+          context.read<SettingsPageBloc>().add(const AddSubmitted());
+        },
+      ),
+    ]);
+  }
+
+  Row getButtons(bool edit, BuildContext context) {
+    if (edit) {
+      return getEditButtons(context);
+    }
+    return getCreateButtons(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -87,40 +125,7 @@ class SettingsPage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  edit
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                              Button(
-                                child: const Text('Delete connection'),
-                                onPressed: () async {
-                                  storage.deleteConnection(connection);
-                                },
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Button(
-                                child: const Text('Save connection'),
-                                onPressed: () async {
-                                  context
-                                      .read<SettingsPageBloc>()
-                                      .add(const AddSubmitted());
-                                },
-                              ),
-                            ])
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                              Button(
-                                child: const Text('Add connection'),
-                                onPressed: () async {
-                                  context
-                                      .read<SettingsPageBloc>()
-                                      .add(const AddSubmitted());
-                                },
-                              ),
-                            ])
+                  getButtons(edit, context)
                 ],
               )),
         );

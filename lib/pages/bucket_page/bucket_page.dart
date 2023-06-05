@@ -41,8 +41,9 @@ class BucketPage extends StatelessWidget {
           String object = state.path.isNotEmpty ? '$path/$fileName' : fileName;
 
           await minio.fPutObject(bucket.name, object, file.path);
-          if (!context.mounted) return;
-          context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
+          if (context.mounted) {
+            context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
+          }
         }
       };
 
@@ -59,18 +60,19 @@ class BucketPage extends StatelessWidget {
           await minio.fGetObject(bucket.name, object.key!,
               path_lib.join(selectedDirectory, path_lib.basename(object.key!)));
 
-          if (!context.mounted) return;
-          displayInfoBar(context, builder: (context, close) {
-            return InfoBar(
-              title: const Text('File downloaded'),
-              content: Text(object.key!),
-              action: IconButton(
-                icon: const Icon(FluentIcons.clear),
-                onPressed: close,
-              ),
-              severity: InfoBarSeverity.success,
-            );
-          });
+          if (context.mounted) {
+            displayInfoBar(context, builder: (context, close) {
+              return InfoBar(
+                title: const Text('File downloaded'),
+                content: Text(object.key!),
+                action: IconButton(
+                  icon: const Icon(FluentIcons.clear),
+                  onPressed: close,
+                ),
+                severity: InfoBarSeverity.success,
+              );
+            });
+          }
         }
       };
 
@@ -95,7 +97,7 @@ class BucketPage extends StatelessWidget {
           List<Object>? objects = state.items.objects;
           List<ListTile>? directoriesWidgets = [];
 
-          for (var directory in directories) {
+          directories.forEach((directory) {
             List<String> splittedPrefix = directory.split('/');
             String? directoryName = splittedPrefix.length > 2
                 ? splittedPrefix[splittedPrefix.length - 2]
@@ -117,10 +119,10 @@ class BucketPage extends StatelessWidget {
                 },
               ));
             }
-          }
+          });
           List<ListTile>? objectsWidgets = [];
 
-          for (var object in objects) {
+          objects.forEach((object) {
             String? objectName = object.key?.split('/').last;
             if (objectName != '' &&
                 objectName != null &&
@@ -135,7 +137,7 @@ class BucketPage extends StatelessWidget {
                 onPressed: downloadObject(object, context),
               ));
             }
-          }
+          });
           List<ListTile> allTiles = [];
           ListTile backTile = ListTile(
             title: const Text('Back'),
