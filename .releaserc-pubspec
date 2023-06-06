@@ -1,0 +1,20 @@
+{
+  "tagFormat": "pre-v${version}",
+  "branches": [
+    "main"
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@64mb/semantic-release-flutter-plugin",
+      {
+        "pubspecPath": "pubspec.yaml"
+      }
+    ]
+  ]
+}
