@@ -1,0 +1,47 @@
+{
+  "branches": [
+    "main"
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "pubspec.yaml"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "successComment": ":tada: this issue has been resolved in version ${nextRelease.version} :tada:\n\nrelease is available on [GitHub](<github_release_url>)",
+        "labels": true,
+        "releasedLabels": true,
+        "assets": [
+          "linux-x64.zip",
+          "windows-x64.zip"
+        ]
+      }
+    ]
+  ]
+}
