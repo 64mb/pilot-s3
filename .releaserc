@@ -1,7 +1,6 @@
 {
   "branches": [
-    "release",
-    "release/**"
+    "release"
   ],
   "plugins": [
     [
@@ -20,17 +19,6 @@
       "@64mb/semantic-release-flutter-plugin",
       {
         "pubspecPath": "pubspec.yaml"
-      }
-    ],
-    [
-      "@semantic-release/github",
-      {
-        "successComment": ":tada: this issue has been resolved in version ${nextRelease.version} :tada:\n\nrelease is available on [GitHub](<github_release_url>)",
-        "labels": true,
-        "releasedLabels": true,
-        "assets": [
-          "build/linux/x64/release/bundle/pilot-s3-linux-x64.zip"
-        ]
       }
     ],
     [
