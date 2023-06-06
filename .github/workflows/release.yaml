@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - main
+
+name: release
+
+jobs:
+  release-linux:
+    name: lint flutter code
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      # - name: set up dart
+      #   uses: dart-lang/setup-dart@v1
+      - name: set up flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.x'
+          channel: 'stable'
+      - name: flutter version
+        run: flutter --version
+      - name: flutter pub get
+        run: flutter pub get
+      - name: analyze dart
+        uses: invertase/github-action-dart-analyzer@v1
+        with:
+          fatal-infos: false
+          fatal-warnings: true
+          annotate: true
+          annotate-only: false
+          working-directory: ./
