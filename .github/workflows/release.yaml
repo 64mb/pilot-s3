@@ -1,8 +1,7 @@
 on:
   push:
     branches:
-      - chore/release-artifacts
-      # temp wip
+      - main
 
 name: release
 permissions:

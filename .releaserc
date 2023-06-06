@@ -1,6 +1,6 @@
 {
   "branches": [
-    "chore/release-artifacts"
+    "main"
   ],
   "plugins": [
     [
