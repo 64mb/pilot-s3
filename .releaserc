@@ -16,7 +16,7 @@
       }
     ],
     [
-      "semantic-release-flutter-plugin",
+      "@64mb/semantic-release-flutter-plugin",
       {
         "pubspecPath": "pubspec.yaml"
       }
