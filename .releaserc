@@ -16,7 +16,10 @@
       }
     ],
     [
-      "semantic-release-dart"
+      "semantic-release-flutter-plugin",
+      {
+        "pubspecPath": "pubspec.yaml"
+      }
     ],
     [
       "@semantic-release/github",

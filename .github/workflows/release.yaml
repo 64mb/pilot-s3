@@ -34,6 +34,8 @@ jobs:
         run: flutter config --enable-linux-desktop
       - name: flutter build linux
         run: flutter build linux
+      - name: install dart release plugin
+        run: npm i semantic-release-dart
       - name: release
         uses: cycjimmy/semantic-release-action@v3
         env:
