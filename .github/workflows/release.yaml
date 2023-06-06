@@ -36,6 +36,9 @@ jobs:
         run: flutter build linux
       - name: release
         uses: cycjimmy/semantic-release-action@v3
+        with:
+          extra_plugins: |
+            semantic-release-flutter-plugin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_AUTHOR_NAME: 64mb
