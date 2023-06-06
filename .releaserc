@@ -16,7 +16,7 @@
       }
     ],
     [
-      "@themizzi/semantic-release-dart"
+      "semantic-release-dart"
     ],
     [
       "@semantic-release/github",
