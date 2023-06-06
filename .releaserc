@@ -28,10 +28,7 @@
         "labels": true,
         "releasedLabels": true,
         "assets": [
-          {
-            "path": "build/linux/x64/release/bundle",
-            "name": "pilot-s3-linux-x64"
-          }
+          "build/linux/x64/release/bundle/pilot-s3-linux-x64.zip"
         ]
       }
     ],
