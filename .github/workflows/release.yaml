@@ -1,33 +1,41 @@
 on:
   push:
     branches:
-      - main
+      - chore/release-artifacts
+      # temp wip
 
 name: release
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
 
 jobs:
   release-linux:
-    name: lint flutter code
+    name: release-linux
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
         uses: actions/checkout@v3
-      # - name: set up dart
-      #   uses: dart-lang/setup-dart@v1
+        with:
+          # safety github token credential
+          persist-credentials: false
+          fetch-depth: 0
       - name: set up flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.10.x'
           channel: 'stable'
-      - name: flutter version
-        run: flutter --version
-      - name: flutter pub get
-        run: flutter pub get
-      - name: analyze dart
-        uses: invertase/github-action-dart-analyzer@v1
-        with:
-          fatal-infos: false
-          fatal-warnings: true
-          annotate: true
-          annotate-only: false
-          working-directory: ./
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
+      - run: flutter config --enable-linux-desktop
+      - run: flutter build linux
+      - name: release
+        uses: cycjimmy/semantic-release-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: 64mb
+          GIT_AUTHOR_EMAIL: robot@64mb.ru
+          GIT_COMMITTER_NAME: 64mb
+          GIT_COMMITTER_EMAIL: robot@64mb.ru
