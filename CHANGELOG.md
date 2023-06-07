@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/64mb/pilot-s3/compare/v1.0.0...v1.0.1) (2023-06-07)
+
+
+### Bug Fixes
+
+* applied avoid literals in foreach calls ([#23](https://github.com/64mb/pilot-s3/issues/23)) ([50df617](https://github.com/64mb/pilot-s3/commit/50df61773c0f394fd13cfbbc5d28b1f8b85f5117))
+* Removed Material dependency ([#22](https://github.com/64mb/pilot-s3/issues/22)) ([7f0edfb](https://github.com/64mb/pilot-s3/commit/7f0edfb9c05a21a6e51b36236423591b06cd6605))
+
 ## 1.0.0 (2023-06-07)
 
 
