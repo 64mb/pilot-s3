@@ -28,7 +28,7 @@ displayAction(BuildContext context, Text what, Text that) {
 displayProgressBar(BuildContext context) {
   displayInfoBar(context, duration: const Duration(seconds: 10),
       builder: (context, close) {
-    return Transform.scale(scale: 3, child: ProgressBar());
+    return Transform.scale(scale: 3, child: const ProgressBar());
   });
 }
 
