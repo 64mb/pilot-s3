@@ -77,8 +77,8 @@ class AddSubmitted extends SettingsPageEvent {
 }
 
 @immutable
-class ConnectionChanged extends SettingsPageEvent {
-  const ConnectionChanged({required this.connection});
+class InitConnectionState extends SettingsPageEvent {
+  const InitConnectionState({required this.connection});
 
   final Connection connection;
 

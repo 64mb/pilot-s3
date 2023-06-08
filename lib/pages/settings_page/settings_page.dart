@@ -67,7 +67,7 @@ class SettingsPage extends StatelessWidget {
           onInit: () {
             context
                 .read<SettingsPageBloc>()
-                .add(ConnectionChanged(connection: connection));
+                .add(InitConnectionState(connection: connection));
           },
           padding: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
