@@ -8,7 +8,7 @@ class SettingsPageState extends Equatable {
     this.secretKey = '',
     this.endpoint = '',
     this.bucket,
-    this.connection = const Connection(),
+    this.connection,
   });
 
   final String name;
@@ -16,7 +16,7 @@ class SettingsPageState extends Equatable {
   final String secretKey;
   final String endpoint;
   final String? bucket;
-  final Connection connection;
+  final Connection? connection;
 
   SettingsPageState copyWith({
     String? name,
@@ -26,6 +26,17 @@ class SettingsPageState extends Equatable {
     String? bucket,
     Connection? connection,
   }) {
+    if (connection != null) {
+      return SettingsPageState(
+        name: connection.name,
+        accessKey: connection.accessKey,
+        secretKey: connection.secretKey,
+        endpoint: connection.endpoint,
+        bucket: connection.bucket,
+        connection: connection,
+      );
+    }
+
     return SettingsPageState(
       name: name ?? this.name,
       accessKey: accessKey ?? this.accessKey,

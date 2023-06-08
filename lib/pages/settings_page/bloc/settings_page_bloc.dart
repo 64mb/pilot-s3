@@ -59,20 +59,14 @@ class SettingsPageBloc extends Bloc<SettingsPageEvent, SettingsPageState> {
     AddSubmitted event,
     Emitter<SettingsPageState> emit,
   ) {
-    Connection connection = Connection(
-        name: state.name != '' ? state.name : state.connection.name,
-        endpoint:
-            state.endpoint != '' ? state.endpoint : state.connection.endpoint,
-        accessKey: state.accessKey != ''
-            ? state.accessKey
-            : state.connection.accessKey,
-        secretKey: state.secretKey != ''
-            ? state.secretKey
-            : state.connection.secretKey,
-        bucket: (state.bucket ?? '') != ''
-            ? state.bucket
-            : state.connection.bucket);
-    storage.saveConnection(state.connection.accessKey, connection);
+    storage.saveConnection(
+        state.connection,
+        Connection(
+            name: state.name,
+            endpoint: state.endpoint,
+            accessKey: state.accessKey,
+            secretKey: state.secretKey,
+            bucket: state.bucket));
   }
 
   void _onConnectionChanged(

@@ -3,25 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pilot_s3/pages/settings_page/bloc/settings_page_bloc.dart';
 import 'package:pilot_s3/storage.dart';
 import 'package:pilot_s3/widgets/settings_textbox.dart';
+import 'package:pilot_s3/widgets/settings_body.dart';
 import 'package:pilot_s3/models/connection.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage(
-      {super.key,
-      this.connection = const Connection(),
-      this.edit = false,
-      required this.storage});
+  const SettingsPage({super.key, this.connection, required this.storage});
 
-  final Connection connection;
+  final Connection? connection;
   final Storage storage;
-  final bool edit;
 
   Row getEditButtons(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Button(
         child: const Text('Delete connection'),
         onPressed: () async {
-          storage.deleteConnection(connection);
+          if (connection != null) {
+            storage.deleteConnection(connection!);
+          }
         },
       ),
       const SizedBox(
@@ -60,19 +58,22 @@ class SettingsPage extends StatelessWidget {
       create: ((context) => SettingsPageBloc(storage: storage)),
       child: BlocBuilder<SettingsPageBloc, SettingsPageState>(
           builder: ((context, state) {
-        context
-            .read<SettingsPageBloc>()
-            .add(ConnectionChanged(connection: connection));
-        return SizedBox(
-          width: 100,
-          child: Padding(
+        return SettingsBody(
+          onInit: () {
+            if (connection != null) {
+              context
+                  .read<SettingsPageBloc>()
+                  .add(ConnectionChanged(connection: connection!));
+            }
+          },
+          padding: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SettingsTextBox(
                       label: 'Name',
-                      value: connection.name,
+                      value: connection == null ? '' : connection!.name,
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -83,7 +84,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsTextBox(
                       label: 'Endpoint',
-                      value: connection.endpoint,
+                      value: connection == null ? '' : connection!.endpoint,
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -94,7 +95,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsTextBox(
                       label: 'Access Key',
-                      value: connection.accessKey,
+                      value: connection == null ? '' : connection!.accessKey,
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -105,7 +106,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsTextBox(
                       label: 'Secret Key',
-                      value: connection.secretKey,
+                      value: connection == null ? '' : connection!.secretKey,
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -116,7 +117,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsTextBox(
                       label: 'Bucket',
-                      value: connection.bucket ?? '',
+                      value: connection == null ? '' : connection!.bucket ?? '',
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -125,7 +126,7 @@ class SettingsPage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  getButtons(edit, context)
+                  getButtons(connection != null, context)
                 ],
               )),
         );
