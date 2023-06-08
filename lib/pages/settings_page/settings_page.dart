@@ -7,19 +7,22 @@ import 'package:pilot_s3/widgets/settings_body.dart';
 import 'package:pilot_s3/models/connection.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key, this.connection, required this.storage});
+  const SettingsPage(
+      {super.key,
+      this.connection = const Connection(),
+      this.edit = false,
+      required this.storage});
 
-  final Connection? connection;
+  final Connection connection;
   final Storage storage;
+  final bool edit;
 
   Row getEditButtons(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Button(
         child: const Text('Delete connection'),
         onPressed: () async {
-          if (connection != null) {
-            storage.deleteConnection(connection!);
-          }
+          storage.deleteConnection(connection);
         },
       ),
       const SizedBox(
@@ -28,7 +31,9 @@ class SettingsPage extends StatelessWidget {
       Button(
         child: const Text('Save connection'),
         onPressed: () async {
-          context.read<SettingsPageBloc>().add(const AddSubmitted());
+          context
+              .read<SettingsPageBloc>()
+              .add(SaveSubmitted(connection: connection));
         },
       ),
     ]);
@@ -60,11 +65,9 @@ class SettingsPage extends StatelessWidget {
           builder: ((context, state) {
         return SettingsBody(
           onInit: () {
-            if (connection != null) {
-              context
-                  .read<SettingsPageBloc>()
-                  .add(ConnectionChanged(connection: connection!));
-            }
+            context
+                .read<SettingsPageBloc>()
+                .add(ConnectionChanged(connection: connection));
           },
           padding: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
@@ -73,7 +76,7 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   SettingsTextBox(
                       label: 'Name',
-                      value: connection == null ? '' : connection!.name,
+                      value: connection.name,
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -84,7 +87,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsTextBox(
                       label: 'Endpoint',
-                      value: connection == null ? '' : connection!.endpoint,
+                      value: connection.endpoint,
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -95,7 +98,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsTextBox(
                       label: 'Access Key',
-                      value: connection == null ? '' : connection!.accessKey,
+                      value: connection.accessKey,
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -106,7 +109,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsTextBox(
                       label: 'Secret Key',
-                      value: connection == null ? '' : connection!.secretKey,
+                      value: connection.secretKey,
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -117,7 +120,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsTextBox(
                       label: 'Bucket',
-                      value: connection == null ? '' : connection!.bucket ?? '',
+                      value: connection.bucket ?? '',
                       onChanged: (value) {
                         context
                             .read<SettingsPageBloc>()
@@ -126,7 +129,7 @@ class SettingsPage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  getButtons(connection != null, context)
+                  getButtons(edit, context)
                 ],
               )),
         );

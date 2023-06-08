@@ -59,6 +59,16 @@ class BucketChanged extends SettingsPageEvent {
 }
 
 @immutable
+class SaveSubmitted extends SettingsPageEvent {
+  const SaveSubmitted({required this.connection});
+
+  final Connection connection;
+
+  @override
+  List<Object?> get props => [connection];
+}
+
+@immutable
 class AddSubmitted extends SettingsPageEvent {
   const AddSubmitted();
 

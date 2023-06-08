@@ -35,6 +35,7 @@ class HomePage extends StatelessWidget {
           title: Text(connection.name),
           body: SettingsPage(
             connection: connection,
+            edit: true,
             storage: storage,
           ),
           items: bucketItems,
