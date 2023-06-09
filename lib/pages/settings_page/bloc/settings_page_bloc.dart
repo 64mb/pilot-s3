@@ -15,7 +15,8 @@ class SettingsPageBloc extends Bloc<SettingsPageEvent, SettingsPageState> {
     on<BucketChanged>(_onBucketChanged);
     on<EndpointChanged>(_onEndpointChanged);
     on<AddSubmitted>(_onAddSubmitted);
-    on<ConnectionChanged>(_onConnectionChanged);
+    on<SaveSubmitted>(_onSaveSubmitted);
+    on<InitConnectionState>(_onInitConnectionState);
   }
 
   final Storage storage;
@@ -59,26 +60,39 @@ class SettingsPageBloc extends Bloc<SettingsPageEvent, SettingsPageState> {
     AddSubmitted event,
     Emitter<SettingsPageState> emit,
   ) {
-    Connection connection = Connection(
-        name: state.name != '' ? state.name : state.connection.name,
-        endpoint:
-            state.endpoint != '' ? state.endpoint : state.connection.endpoint,
-        accessKey: state.accessKey != ''
-            ? state.accessKey
-            : state.connection.accessKey,
-        secretKey: state.secretKey != ''
-            ? state.secretKey
-            : state.connection.secretKey,
-        bucket: (state.bucket ?? '') != ''
-            ? state.bucket
-            : state.connection.bucket);
-    storage.saveConnection(state.connection.accessKey, connection);
+    storage.saveConnection(
+        null,
+        Connection(
+            name: state.name,
+            endpoint: state.endpoint,
+            accessKey: state.accessKey,
+            secretKey: state.secretKey,
+            bucket: state.bucket));
   }
 
-  void _onConnectionChanged(
-    ConnectionChanged event,
+  void _onSaveSubmitted(
+    SaveSubmitted event,
     Emitter<SettingsPageState> emit,
   ) {
-    emit(state.copyWith(connection: event.connection));
+    storage.saveConnection(
+        event.connection,
+        Connection(
+            name: state.name,
+            endpoint: state.endpoint,
+            accessKey: state.accessKey,
+            secretKey: state.secretKey,
+            bucket: state.bucket));
+  }
+
+  void _onInitConnectionState(
+    InitConnectionState event,
+    Emitter<SettingsPageState> emit,
+  ) {
+    emit(state.copyWith(
+        name: event.connection.name,
+        accessKey: event.connection.accessKey,
+        secretKey: event.connection.secretKey,
+        endpoint: event.connection.endpoint,
+        bucket: event.connection.bucket));
   }
 }

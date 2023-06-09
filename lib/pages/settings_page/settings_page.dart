@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pilot_s3/pages/settings_page/bloc/settings_page_bloc.dart';
 import 'package:pilot_s3/storage.dart';
 import 'package:pilot_s3/widgets/settings_textbox.dart';
+import 'package:pilot_s3/widgets/settings_body.dart';
 import 'package:pilot_s3/models/connection.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -30,7 +31,9 @@ class SettingsPage extends StatelessWidget {
       Button(
         child: const Text('Save connection'),
         onPressed: () async {
-          context.read<SettingsPageBloc>().add(const AddSubmitted());
+          context
+              .read<SettingsPageBloc>()
+              .add(SaveSubmitted(connection: connection));
         },
       ),
     ]);
@@ -60,12 +63,13 @@ class SettingsPage extends StatelessWidget {
       create: ((context) => SettingsPageBloc(storage: storage)),
       child: BlocBuilder<SettingsPageBloc, SettingsPageState>(
           builder: ((context, state) {
-        context
-            .read<SettingsPageBloc>()
-            .add(ConnectionChanged(connection: connection));
-        return SizedBox(
-          width: 100,
-          child: Padding(
+        return SettingsBody(
+          onInit: () {
+            context
+                .read<SettingsPageBloc>()
+                .add(InitConnectionState(connection: connection));
+          },
+          padding: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

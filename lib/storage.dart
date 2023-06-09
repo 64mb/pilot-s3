@@ -46,8 +46,11 @@ class Storage {
   Stream<Map<String, List<Bucket>>> getBucketStream() =>
       _bucketController.stream;
 
-  void saveConnection(String accessKey, Connection connection) async {
+  void saveConnection(Connection? prevConnection, Connection connection) async {
     if (_box == null) return;
+    final String accessKey = prevConnection != null
+        ? prevConnection.accessKey
+        : connection.accessKey;
     Map<dynamic, Connection> connectionMap = _box!.toMap();
     final connectionKey = connectionMap.keys.firstWhere(
       (k) => connectionMap[k]?.accessKey == accessKey,
@@ -59,6 +62,7 @@ class Storage {
     } else {
       _box!.add(connection);
     }
+    _box!.compact();
 
     List<Connection> connectionList = _box!.values.toList();
     _controller.add(connectionList);
@@ -102,6 +106,7 @@ class Storage {
     );
     if (connectionKey == null) return;
     _box!.delete(connectionKey);
+    _box!.compact();
     List<Connection> connectionList = _box!.values.toList();
     _controller.add(connectionList);
   }
