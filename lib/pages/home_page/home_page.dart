@@ -75,6 +75,31 @@ class HomePage extends StatelessWidget {
           List<NavigationPaneItem> connectionItems =
               getConnectionItems(connections, buckets);
 
+          List<PaneItem> flatConnectionItems = [];
+          List<PaneItem> flatBucketItems = [];
+          for (var connection in connections) {
+            flatConnectionItems.add(PaneItem(
+                title: Text(connection.name),
+                body: SettingsPage(
+                  connection: connection,
+                  edit: true,
+                  storage: storage,
+                ),
+                icon: const Icon(FluentIcons.add_connection)));
+            if (buckets[connection.accessKey] != null) {
+              flatBucketItems
+                  .addAll(buckets[connection.accessKey]!.map((bucket) {
+                return PaneItem(
+                    body: BucketPage(
+                        connection: connection,
+                        bucket: bucket,
+                        storage: storage),
+                    title: Text(bucket.name),
+                    icon: const Icon(FluentIcons.bucket_color_fill));
+              }).toList());
+            }
+          }
+
           final List<NavigationPaneItem> footerItems = [
             PaneItemSeparator(),
             PaneItem(
@@ -93,7 +118,12 @@ class HomePage extends StatelessWidget {
           if (state.search.isEmpty) {
             items = [...originalItems, ...connectionItems];
           } else {
-            items = [...originalItems, ...connectionItems, ...footerItems]
+            items = [
+              ...originalItems,
+              ...flatConnectionItems,
+              ...flatBucketItems,
+              ...footerItems
+            ]
                 .whereType<PaneItem>()
                 .where((item) {
                   assert(item.title is Text);
@@ -139,10 +169,12 @@ class HomePage extends StatelessWidget {
                 selected: getSelectedIndex(),
                 onChanged: (index) {
                   int computedIndex = index;
+
                   if (state.search.isNotEmpty) {
                     final equivalentIndex = [
                       ...originalItems,
-                      ...connectionItems,
+                      ...flatConnectionItems,
+                      ...flatBucketItems,
                       ...footerItems
                     ]
                         .whereType<PaneItem>()
