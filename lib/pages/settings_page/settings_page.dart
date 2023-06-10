@@ -27,13 +27,13 @@ class SettingsPage extends StatelessWidget {
               builder: (context) => ContentDialog(
                     title: const Text('Delete file permanently?'),
                     content: const Text(
-                      'If you delete this file, you won\'t be able to recover it. Do you want to delete it?',
+                      'Are you sure you want to delete this connection?',
                     ),
                     actions: [
                       Button(
                         onPressed: () {
                           storage.deleteConnection(connection);
-                          Navigator.pop(context, 'User deleted file');
+                          Navigator.pop(context, 'User deleted connection');
                         },
                         child: const Text('Delete'),
                       ),
