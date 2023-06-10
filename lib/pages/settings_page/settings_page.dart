@@ -37,7 +37,7 @@ class SettingsPage extends StatelessWidget {
                         },
                         child: const Text('Delete'),
                       ),
-                      Button(
+                      FilledButton(
                         onPressed: () {
                           Navigator.pop(context, 'User canceled dialog');
                         },
