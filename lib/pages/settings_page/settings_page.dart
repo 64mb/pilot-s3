@@ -22,7 +22,7 @@ class SettingsPage extends StatelessWidget {
       Button(
         child: const Text('Delete connection'),
         onPressed: () async {
-          showDialog<String>(
+          showDialog(
               context: context,
               builder: (context) => ContentDialog(
                     title: const Text('Delete file permanently?'),
@@ -33,13 +33,13 @@ class SettingsPage extends StatelessWidget {
                       Button(
                         onPressed: () {
                           storage.deleteConnection(connection);
-                          Navigator.pop(context, 'User deleted connection');
+                          Navigator.pop(context);
                         },
                         child: const Text('Delete'),
                       ),
                       FilledButton(
                         onPressed: () {
-                          Navigator.pop(context, 'User canceled dialog');
+                          Navigator.pop(context);
                         },
                         child: const Text('Cancel'),
                       )
