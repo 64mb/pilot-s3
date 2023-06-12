@@ -78,7 +78,7 @@ class Storage {
 
     List<Bucket> buckets = [];
 
-    if (connection.bucket == null) {
+    if (connection.bucket == null || connection.bucket == '' ) {
       buckets.addAll(await minio.listBuckets());
     } else {
       buckets.add(Bucket(DateTime.now(), connection.bucket!));
