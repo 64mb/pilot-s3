@@ -24,7 +24,7 @@ jobs:
       - name: flutter pub get
         run: flutter pub get
       - name: flutter build web
-        run: flutter build web --no-tree-shake-icons
+        run: flutter build web --no-tree-shake-icons --base-href "/test"
       - name: upload to s3
         id: s3
         uses: shallwefootball/s3-upload-action@master
