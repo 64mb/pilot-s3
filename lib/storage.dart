@@ -22,7 +22,7 @@ class Storage {
   }
 
   _init() async {
-    var hiveDbPath;
+    String? hiveDbPath;
 
     if (!kIsWeb) {
       final appDir = await path_provider.getApplicationDocumentsDirectory();
