@@ -1,0 +1,38 @@
+on:
+  push:
+    branches:
+      - ci/build-web-version
+
+name: preview-pr
+permissions:
+  pull-requests: write
+
+jobs:
+  main:
+    name: preview pr web build
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: set up flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.x'
+          channel: 'stable'
+      - name: flutter version
+        run: flutter --version
+      - name: flutter pub get
+        run: flutter pub get
+      - name: flutter build web
+        run: flutter build web --no-tree-shake-icons
+      - name: upload to s3
+        id: s3
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.S3_ACCESS_KEY }}
+          aws_secret_access_key: ${{ secrets.S3_SECRET_KEY}}
+          aws_bucket: ${{ secrets.S3_BUCKET }}
+          endpoint: ${{ secrets.S3_ENDPOINT }}
+          source_dir: build/web
+          destination_dir: test
+      - run: echo "${{ steps.s3.outputs.object_locations }}"
