@@ -45,6 +45,6 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            👋 Hi, I have prepared a preview of this PR with web build
-            [🌐 Preview \#${{ github.event.pull_request.number }}](${{ vars.S3_ENDPOINT }}/${{ github.event.pull_request.number }})
+            👋 Hi, I have prepared a preview of this PR with web build: 
+            [preview \#${{ github.event.pull_request.number }}](${{ vars.S3_DOMAIN }}/${{ github.event.pull_request.number }})
           edit-mode: replace
