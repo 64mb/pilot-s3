@@ -29,7 +29,7 @@ jobs:
           aws_key_id: ${{ secrets.S3_ACCESS_KEY }}
           aws_secret_access_key: ${{ secrets.S3_SECRET_KEY}}
           aws_bucket: ${{ secrets.S3_BUCKET }}
-          endpoint: ${{ env.S3_ENDPOINT }}
+          endpoint: ${{ vars.S3_ENDPOINT }}
           source_dir: build/web
           destination_dir: ${{ github.event.pull_request.number }}
       - name: find first comment
@@ -46,5 +46,5 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             👋 Hi, I have prepared a preview of this PR with web build
-            [🌐 Preview \#${{ github.event.pull_request.number }}](${{ env.S3_ENDPOINT }}/${{ github.event.pull_request.number }})
+            [🌐 Preview \#${{ github.event.pull_request.number }}](${{ vars.S3_ENDPOINT }}/${{ github.event.pull_request.number }})
           edit-mode: replace
