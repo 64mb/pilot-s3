@@ -1,7 +1,4 @@
-on:
-  push:
-    branches:
-      - ci/build-web-version
+on: pull_request
 
 name: preview-pr
 permissions:
@@ -24,7 +21,7 @@ jobs:
       - name: flutter pub get
         run: flutter pub get
       - name: flutter build web
-        run: flutter build web --no-tree-shake-icons --base-href "/test/"
+        run: flutter build web --no-tree-shake-icons --base-href "/${{ github.event.pull_request.number }}/"
       - name: upload to s3
         id: s3
         uses: shallwefootball/s3-upload-action@master
@@ -32,7 +29,22 @@ jobs:
           aws_key_id: ${{ secrets.S3_ACCESS_KEY }}
           aws_secret_access_key: ${{ secrets.S3_SECRET_KEY}}
           aws_bucket: ${{ secrets.S3_BUCKET }}
-          endpoint: ${{ secrets.S3_ENDPOINT }}
+          endpoint: ${{ env.S3_ENDPOINT }}
           source_dir: build/web
-          destination_dir: test
-      - run: echo "${{ steps.s3.outputs.object_locations }}"
+          destination_dir: ${{ github.event.pull_request.number }}
+      - name: find first comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: web preview
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            👋 Hi, I have prepared a preview of this PR with web build
+            [🌐 Preview \#${{ github.event.pull_request.number }}](${{ env.S3_ENDPOINT }}/${{ github.event.pull_request.number }})
+          edit-mode: replace
