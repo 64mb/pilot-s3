@@ -1,7 +1,7 @@
 name: pilot_s3
 description: S3 compatible object storage gui browser
 publish_to: none
-version: 1.0.2+100002000
+version: 1.0.0+100000000
 environment:
   sdk: ">=2.18.5 <3.0.0"
 dependencies:
