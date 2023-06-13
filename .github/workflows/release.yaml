@@ -132,7 +132,7 @@ jobs:
           aws_bucket: ${{ secrets.S3_BUCKET }}
           endpoint: ${{ vars.S3_ENDPOINT }}
           source_dir: build/web
-          destination_dir: /
+          destination_dir: ''
   github-release:
     name: github-release
     runs-on: ubuntu-latest
