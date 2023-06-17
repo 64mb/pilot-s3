@@ -42,10 +42,6 @@ class BucketPage extends StatelessWidget {
               previous.status != current.status;
         },
         builder: (context, state) {
-          String currentPath = state.path.isNotEmpty
-              ? '${path.joinAll(state.path)}/'
-              : path.joinAll(state.path);
-
           List<String>? directories = state.items.prefixes;
           List<Object>? objects = state.items.objects;
           List<ListTile>? directoriesWidgets = [];
@@ -136,7 +132,13 @@ class BucketPage extends StatelessWidget {
           allTiles.addAll(objectsWidgets);
 
           BucketToolbar toolbar = BucketToolbar(
-            path: currentPath,
+            path: state.path,
+            onChange: (newPath) {
+              context.read<BucketPageBloc>().add(DirectoryAdded(path: newPath));
+              context
+                  .read<BucketPageBloc>()
+                  .add(ObjectsRequested(prefix: path.joinAll(newPath)));
+            },
             onRefresh: () {
               context
                   .read<BucketPageBloc>()
