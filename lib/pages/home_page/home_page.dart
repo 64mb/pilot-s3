@@ -187,8 +187,6 @@ class HomePage extends StatelessWidget {
                         .whereType<PaneItem>()
                         .toList()
                         .indexOf(items[index] as PaneItem);
-                    print(index);
-                    print(equivalentIndex);
                     computedIndex = equivalentIndex;
                   }
                   context.read<HomePageBloc>().add(const SearchReset());
