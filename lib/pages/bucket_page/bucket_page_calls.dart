@@ -68,7 +68,7 @@ uploadObject(state, connection, bucket, BuildContext context) => () async {
 
         await minio.fPutObject(bucket.name, object, file.path);
         if (context.mounted) {
-          context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
+          context.read<BucketPageBloc>().add(ObjectsRequested(prefix: newPath));
           displayAction(context, const Text('file_uploaded').tr(), Text(fileName));
         }
       }
