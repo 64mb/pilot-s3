@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class DashboardCard extends StatelessWidget {
@@ -29,7 +30,7 @@ class DashboardCard extends StatelessWidget {
             Text(
               label,
               style: const TextStyle(fontSize: 18),
-            )
+            ).plural(count)
           ]),
     );
   }

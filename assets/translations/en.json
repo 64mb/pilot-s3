@@ -1,0 +1,31 @@
+{
+  "search": "Search",
+  "menu": "Menu",
+  "home": "Home",
+  "connections": "connections",
+  "connections_plural": {
+    "one": "Connection",
+    "few": "Connections",
+    "other": "Connections"
+  },
+  "settings": "Settings",
+  "name": "Name",
+  "back": "Back",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "bucket": "Bucket",
+  "buckets_plural": {
+    "one": "Bucket",
+    "few": "Buckets",
+    "other": "Buckets"
+  },
+  "add_connection": "Add connection",
+  "delete_connection": "Delete connection",
+  "save_connection": "Save connection",
+  "language": "Language",
+  "file_uploaded": "File uploaded",
+  "file_downloaded": "File downloaded",
+  "file_deleted": "File deleted",
+  "delete_connection_confirmation_title": "Delete connection permanently?",
+  "delete_connection_confirmation_description": "Are you sure you want to delete this connection?"
+}

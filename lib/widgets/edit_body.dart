@@ -1,16 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-class SettingsBody extends StatefulWidget {
-  const SettingsBody({Key? key, required this.onInit, required this.padding})
+class EditBody extends StatefulWidget {
+  const EditBody({Key? key, required this.onInit, required this.padding})
       : super(key: key);
   final Function onInit;
   final Padding padding;
 
   @override
-  StateSettingsBody createState() => StateSettingsBody();
+  StateEditBody createState() => StateEditBody();
 }
 
-class StateSettingsBody extends State<SettingsBody> {
+class StateEditBody extends State<EditBody> {
   @override
   void initState() {
     widget.onInit();

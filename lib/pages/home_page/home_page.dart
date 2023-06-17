@@ -1,10 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minio/models.dart';
 import 'package:pilot_s3/models/connection.dart';
 import 'package:pilot_s3/pages/home_page/bloc/home_page_bloc.dart';
-import 'package:pilot_s3/pages/settings_page/settings_page.dart';
+import 'package:pilot_s3/pages/edit_page/edit_page.dart';
 import 'package:pilot_s3/pages/bucket_page/bucket_page.dart';
+import 'package:pilot_s3/pages/settings_page.dart';
 import 'package:pilot_s3/storage.dart';
 import 'package:pilot_s3/widgets/home_dashboard.dart';
 
@@ -16,7 +18,7 @@ class HomePage extends StatelessWidget {
   List<NavigationPaneItem> getConnectionItems(
       List<Connection> connections, Map<String, List<Bucket>> buckets) {
     List<NavigationPaneItem> items = [
-      PaneItemHeader(header: const Text('Connections')),
+      PaneItemHeader(header: const Text('connections').tr()),
       PaneItemSeparator(),
     ];
 
@@ -28,18 +30,18 @@ class HomePage extends StatelessWidget {
               body: BucketPage(
                   connection: connection, bucket: bucket, storage: storage),
               title: Text(bucket.name),
-              icon: const Icon(FluentIcons.bucket_color_fill));
+              icon: const Icon(FluentIcons.outlook_spaces_bucket));
         }).toList();
       }
       items.add(PaneItemExpander(
           title: Text(connection.name),
-          body: SettingsPage(
+          body: EditPage(
             connection: connection,
             edit: true,
             storage: storage,
           ),
           items: bucketItems,
-          icon: const Icon(FluentIcons.add_connection)));
+          icon: const Icon(FluentIcons.data_connection_library)));
     }
 
     return items;
@@ -58,11 +60,11 @@ class HomePage extends StatelessWidget {
       child: BlocBuilder<HomePageBloc, HomePageState>(
         builder: (context, state) {
           final List<NavigationPaneItem> originalItems = [
-            PaneItemHeader(header: const Text('Menu')),
+            PaneItemHeader(header: const Text('menu').tr()),
             PaneItemSeparator(),
             PaneItem(
               icon: const Icon(FluentIcons.home),
-              title: const Text('Home'),
+              title: const Text('home').tr(),
               body: HomeDashboard(
                 storage: storage,
               ),
@@ -80,7 +82,7 @@ class HomePage extends StatelessWidget {
           for (var connection in connections) {
             flatConnectionItems.add(PaneItem(
                 title: Text(connection.name),
-                body: SettingsPage(
+                body: EditPage(
                   connection: connection,
                   edit: true,
                   storage: storage,
@@ -103,11 +105,16 @@ class HomePage extends StatelessWidget {
           final List<NavigationPaneItem> footerItems = [
             PaneItemSeparator(),
             PaneItem(
-              icon: const Icon(FluentIcons.settings),
-              title: const Text('Settings'),
-              body: SettingsPage(
+              icon: const Icon(FluentIcons.add_connection),
+              title: const Text('add_connection').tr(),
+              body: EditPage(
                 storage: storage,
               ),
+            ),
+            PaneItem(
+              icon: const Icon(FluentIcons.settings),
+              title: const Text('settings').tr(),
+              body: const SettingsPage(),
             ),
           ];
           List<NavigationPaneItem> items = [
@@ -156,7 +163,7 @@ class HomePage extends StatelessWidget {
                   controller: searchController,
                   focusNode: searchFocusNode,
                   key: key,
-                  placeholder: 'Search',
+                  placeholder: tr('search'),
                   onChanged: (search) {
                     context
                         .read<HomePageBloc>()

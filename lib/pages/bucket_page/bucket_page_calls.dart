@@ -42,7 +42,7 @@ deleteObject(object, connection, bucket, BuildContext context, state) =>
       await minio.removeObject(bucket.name, object.key!);
 
       if (context.mounted) {
-        displayAction(context, const Text('File deleted'), Text(object.key!));
+        displayAction(context, const Text('file_deleted').tr(), Text(object.key!));
         context
             .read<BucketPageBloc>()
             .add(ObjectsRequested(prefix: state.path.join('/')));
@@ -69,7 +69,7 @@ uploadObject(state, connection, bucket, BuildContext context) => () async {
         await minio.fPutObject(bucket.name, object, file.path);
         if (context.mounted) {
           context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
-          displayAction(context, const Text('File uploaded'), Text(fileName));
+          displayAction(context, const Text('file_uploaded').tr(), Text(fileName));
         }
       }
     };
@@ -89,7 +89,7 @@ downloadObject(object, connection, bucket, BuildContext context) => () async {
 
         if (context.mounted) {
           displayAction(
-              context, const Text('File downloaded'), Text(object.key!));
+              context, const Text('file_downloaded').tr(), Text(object.key!));
         }
       }
     };
