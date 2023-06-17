@@ -24,18 +24,14 @@ class HomeDashboard extends StatelessWidget {
                         children: [
                           DashboardCard(
                             count: snapshot.data!['connections']!,
-                            label: snapshot.data!['connections'] == 1
-                                ? 'Connection'
-                                : 'Connections',
+                            label: 'connections_plural'
                           ),
                           const SizedBox(
                             width: 24,
                           ),
                           DashboardCard(
                             count: snapshot.data!['buckets']!,
-                            label: snapshot.data!['buckets'] == 1
-                                ? 'Bucket'
-                                : 'Buckets',
+                            label: 'buckets_plural'
                           ),
                         ],
                       )

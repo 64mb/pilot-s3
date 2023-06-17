@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minio/io.dart';
@@ -119,7 +120,7 @@ class BucketPage extends StatelessWidget {
           }
           List<ListTile> allTiles = [];
           ListTile backTile = ListTile(
-            title: const Text('Back'),
+            title: const Text('back').tr(),
             leading: const Icon(FluentIcons.navigate_back),
             onPressed: () {
               List<String> newPath =
@@ -150,7 +151,7 @@ class BucketPage extends StatelessWidget {
               prefix: Container(
                   padding: const EdgeInsets.only(left: 12),
                   child: const Icon(FluentIcons.search)),
-              placeholder: 'Search',
+              placeholder: tr('search'),
               onChanged: (value) {
                 context.read<BucketPageBloc>().add(FilterBucket(filter: value));
               },

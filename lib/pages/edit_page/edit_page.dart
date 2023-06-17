@@ -1,13 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pilot_s3/pages/settings_page/bloc/settings_page_bloc.dart';
+import 'package:pilot_s3/pages/edit_page/bloc/edit_page_bloc.dart';
 import 'package:pilot_s3/storage.dart';
-import 'package:pilot_s3/widgets/settings_textbox.dart';
-import 'package:pilot_s3/widgets/settings_body.dart';
+import 'package:pilot_s3/widgets/edit_textbox.dart';
+import 'package:pilot_s3/widgets/edit_body.dart';
 import 'package:pilot_s3/models/connection.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage(
+class EditPage extends StatelessWidget {
+  const EditPage(
       {super.key,
       this.connection = const Connection(),
       this.edit = false,
@@ -20,28 +21,29 @@ class SettingsPage extends StatelessWidget {
   Row getEditButtons(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Button(
-        child: const Text('Delete connection'),
+        child: const Text('delete_connection').tr(),
         onPressed: () async {
           showDialog(
               context: context,
               builder: (context) => ContentDialog(
-                    title: const Text('Delete file permanently?'),
+                    title:
+                        const Text('delete_connection_confirmation_title').tr(),
                     content: const Text(
-                      'Are you sure you want to delete this connection?',
-                    ),
+                      'delete_connection_confirmation_description',
+                    ).tr(),
                     actions: [
                       Button(
                         onPressed: () {
                           storage.deleteConnection(connection);
                           Navigator.pop(context);
                         },
-                        child: const Text('Delete'),
+                        child: const Text('delete').tr(),
                       ),
                       FilledButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Cancel'),
+                        child: const Text('cancel').tr(),
                       )
                     ],
                   ));
@@ -51,10 +53,10 @@ class SettingsPage extends StatelessWidget {
         width: 20,
       ),
       Button(
-        child: const Text('Save connection'),
+        child: const Text('save_connection').tr(),
         onPressed: () async {
           context
-              .read<SettingsPageBloc>()
+              .read<EditPageBloc>()
               .add(SaveSubmitted(connection: connection));
         },
       ),
@@ -64,9 +66,9 @@ class SettingsPage extends StatelessWidget {
   Row getCreateButtons(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Button(
-        child: const Text('Add connection'),
+        child: const Text('add_connection').tr(),
         onPressed: () async {
-          context.read<SettingsPageBloc>().add(const AddSubmitted());
+          context.read<EditPageBloc>().add(const AddSubmitted());
         },
       ),
     ]);
@@ -82,13 +84,13 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: ((context) => SettingsPageBloc(storage: storage)),
-      child: BlocBuilder<SettingsPageBloc, SettingsPageState>(
+      create: ((context) => EditPageBloc(storage: storage)),
+      child: BlocBuilder<EditPageBloc, EditPageState>(
           builder: ((context, state) {
-        return SettingsBody(
+        return EditBody(
           onInit: () {
             context
-                .read<SettingsPageBloc>()
+                .read<EditPageBloc>()
                 .add(InitConnectionState(connection: connection));
           },
           padding: Padding(
@@ -96,62 +98,62 @@ class SettingsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SettingsTextBox(
-                      label: 'Name',
+                  EditTextBox(
+                      label: tr('name'),
                       value: connection.name,
                       onChanged: (value) {
                         context
-                            .read<SettingsPageBloc>()
+                            .read<EditPageBloc>()
                             .add(NameChanged(name: value));
                       }),
                   const SizedBox(
                     height: 20,
                   ),
-                  SettingsTextBox(
+                  EditTextBox(
                       label: 'Endpoint',
                       value: connection.endpoint,
                       onChanged: (value) {
                         context
-                            .read<SettingsPageBloc>()
+                            .read<EditPageBloc>()
                             .add(EndpointChanged(endpoint: value));
                       }),
                   const SizedBox(
                     height: 20,
                   ),
-                  SettingsTextBox(
+                  EditTextBox(
                       label: 'Access Key',
                       value: connection.accessKey,
                       onChanged: (value) {
                         context
-                            .read<SettingsPageBloc>()
+                            .read<EditPageBloc>()
                             .add(AccessKeyChanged(accessKey: value));
                       }),
                   const SizedBox(
                     height: 20,
                   ),
-                  SettingsTextBox(
+                  EditTextBox(
                       label: 'Secret Key',
                       value: connection.secretKey,
                       onChanged: (value) {
                         context
-                            .read<SettingsPageBloc>()
+                            .read<EditPageBloc>()
                             .add(SecretKeyChanged(secretKey: value));
                       }),
                   const SizedBox(
                     height: 20,
                   ),
-                  SettingsTextBox(
-                      label: 'Bucket',
+                  EditTextBox(
+                      label: tr('bucket'),
                       value: connection.bucket ?? '',
                       onChanged: (value) {
                         context
-                            .read<SettingsPageBloc>()
+                            .read<EditPageBloc>()
                             .add(BucketChanged(bucket: value));
                       }),
                   const SizedBox(
                     height: 20,
                   ),
-                  getButtons(edit, context)
+                  getButtons(edit, context),
                 ],
               )),
         );

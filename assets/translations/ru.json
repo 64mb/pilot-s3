@@ -1,0 +1,35 @@
+{
+  "search": "Поиск",
+  "menu": "Меню",
+  "home": "Главная",
+  "connections": "Подключения",
+  "connections_plural": {
+    "zero": "Подключений",
+    "one": "Подключение",
+    "few": "Подключения",
+    "many": "Подключений",
+    "other": "Подключения"
+  },
+  "settings": "Настройки",
+  "name": "Название",
+  "back": "Назад",
+  "delete": "Удалить",
+  "cancel": "Отмена",
+  "bucket": "Бакет",
+  "buckets_plural": {
+    "zero": "Бакетов",
+    "one": "Бакет",
+    "few": "Бакета",
+    "many": "Бакетов",
+    "other": "Бакетов"
+  },
+  "add_connection": "Добавить подключение",
+  "delete_connection": "Удалить подключение",
+  "save_connection": "Сохранить подключение",
+  "language": "Язык",
+  "file_uploaded": "Файл загружен",
+  "file_downloaded": "Файл скачан",
+  "file_deleted": "Файл удалён",
+  "delete_connection_confirmation_title": "Удалить подключение навсегда?",
+  "delete_connection_confirmation_description": "Вы точно хотите удалить данное подключение?"
+}
