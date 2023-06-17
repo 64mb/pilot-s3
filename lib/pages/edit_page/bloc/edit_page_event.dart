@@ -1,15 +1,15 @@
-part of 'settings_page_bloc.dart';
+part of 'edit_page_bloc.dart';
 
 @immutable
-abstract class SettingsPageEvent extends Equatable {
-  const SettingsPageEvent();
+abstract class EditPageEvent extends Equatable {
+  const EditPageEvent();
 
   @override
   List<Object?> get props => [];
 }
 
 @immutable
-class NameChanged extends SettingsPageEvent {
+class NameChanged extends EditPageEvent {
   const NameChanged({required this.name});
 
   final String name;
@@ -19,7 +19,7 @@ class NameChanged extends SettingsPageEvent {
 }
 
 @immutable
-class AccessKeyChanged extends SettingsPageEvent {
+class AccessKeyChanged extends EditPageEvent {
   const AccessKeyChanged({required this.accessKey});
 
   final String accessKey;
@@ -29,7 +29,7 @@ class AccessKeyChanged extends SettingsPageEvent {
 }
 
 @immutable
-class SecretKeyChanged extends SettingsPageEvent {
+class SecretKeyChanged extends EditPageEvent {
   const SecretKeyChanged({required this.secretKey});
 
   final String? secretKey;
@@ -39,7 +39,7 @@ class SecretKeyChanged extends SettingsPageEvent {
 }
 
 @immutable
-class EndpointChanged extends SettingsPageEvent {
+class EndpointChanged extends EditPageEvent {
   const EndpointChanged({required this.endpoint});
 
   final String endpoint;
@@ -49,7 +49,7 @@ class EndpointChanged extends SettingsPageEvent {
 }
 
 @immutable
-class BucketChanged extends SettingsPageEvent {
+class BucketChanged extends EditPageEvent {
   const BucketChanged({required this.bucket});
 
   final String? bucket;
@@ -59,7 +59,7 @@ class BucketChanged extends SettingsPageEvent {
 }
 
 @immutable
-class SaveSubmitted extends SettingsPageEvent {
+class SaveSubmitted extends EditPageEvent {
   const SaveSubmitted({required this.connection});
 
   final Connection connection;
@@ -69,7 +69,7 @@ class SaveSubmitted extends SettingsPageEvent {
 }
 
 @immutable
-class AddSubmitted extends SettingsPageEvent {
+class AddSubmitted extends EditPageEvent {
   const AddSubmitted();
 
   @override
@@ -77,7 +77,7 @@ class AddSubmitted extends SettingsPageEvent {
 }
 
 @immutable
-class InitConnectionState extends SettingsPageEvent {
+class InitConnectionState extends EditPageEvent {
   const InitConnectionState({required this.connection});
 
   final Connection connection;

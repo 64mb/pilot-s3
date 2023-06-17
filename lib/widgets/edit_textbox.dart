@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-class SettingsTextBox extends StatefulWidget {
-  const SettingsTextBox(
+class EditTextBox extends StatefulWidget {
+  const EditTextBox(
       {Key? key, this.label = '', this.value = '', required this.onChanged})
       : super(key: key);
   final String label;
@@ -9,10 +9,10 @@ class SettingsTextBox extends StatefulWidget {
   final Function(String) onChanged;
 
   @override
-  StateSettingsTextBox createState() => StateSettingsTextBox();
+  StateEditTextBox createState() => StateEditTextBox();
 }
 
-class StateSettingsTextBox extends State<SettingsTextBox> {
+class StateEditTextBox extends State<EditTextBox> {
   final TextEditingController _controller = TextEditingController();
 
   @override
