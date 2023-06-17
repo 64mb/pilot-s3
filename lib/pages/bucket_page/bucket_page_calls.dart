@@ -45,7 +45,7 @@ deleteObject(object, connection, bucket, BuildContext context, state) =>
         displayAction(context, const Text('File deleted'), Text(object.key!));
         context
             .read<BucketPageBloc>()
-            .add(ObjectsRequested(prefix: state.path.join('/')));
+            .add(ObjectsRequested(prefix: path.joinAll(state.path)));
       }
     };
 
@@ -62,13 +62,13 @@ uploadObject(state, connection, bucket, BuildContext context) => () async {
             secretKey: connection.secretKey);
 
         String fileName = result.files.single.name;
-        String path = state.path.join('/');
+        String newPath = path.joinAll(state.path);
 
-        String object = state.path.isNotEmpty ? '$path/$fileName' : fileName;
+        String object = state.path.isNotEmpty ? '$newPath/$fileName' : fileName;
 
         await minio.fPutObject(bucket.name, object, file.path);
         if (context.mounted) {
-          context.read<BucketPageBloc>().add(ObjectsRequested(prefix: path));
+          context.read<BucketPageBloc>().add(ObjectsRequested(prefix: newPath));
           displayAction(context, const Text('File uploaded'), Text(fileName));
         }
       }

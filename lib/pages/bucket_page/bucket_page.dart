@@ -12,6 +12,7 @@ import 'package:file_icon/file_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path_lib;
+import 'package:path/path.dart' as path;
 import 'package:pilot_s3/widgets/bucket_toolbar.dart';
 
 part 'bucket_page_elements.dart';
@@ -42,8 +43,8 @@ class BucketPage extends StatelessWidget {
         },
         builder: (context, state) {
           String currentPath = state.path.isNotEmpty
-              ? '${state.path.join('/')}/'
-              : state.path.join('/');
+              ? '${path.joinAll(state.path)}/'
+              : path.joinAll(state.path);
 
           List<String>? directories = state.items.prefixes;
           List<Object>? objects = state.items.objects;
@@ -127,7 +128,7 @@ class BucketPage extends StatelessWidget {
               context.read<BucketPageBloc>().add(const ToBack());
               context
                   .read<BucketPageBloc>()
-                  .add(ObjectsRequested(prefix: newPath.join('/')));
+                  .add(ObjectsRequested(prefix: path.joinAll(newPath)));
             },
           );
           if (state.path.isNotEmpty) allTiles.add(backTile);
@@ -139,7 +140,7 @@ class BucketPage extends StatelessWidget {
             onRefresh: () {
               context
                   .read<BucketPageBloc>()
-                  .add(ObjectsRequested(prefix: state.path.join('/')));
+                  .add(ObjectsRequested(prefix: path.joinAll(state.path)));
             },
             onUpload: uploadObject(state, connection, bucket, context),
           );
