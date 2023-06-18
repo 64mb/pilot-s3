@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pilot_s3/pages/edit_page/bloc/edit_page_bloc.dart';
 import 'package:pilot_s3/storage.dart';
 import 'package:pilot_s3/widgets/edit_textbox.dart';
-import 'package:pilot_s3/widgets/edit_body.dart';
 import 'package:pilot_s3/models/connection.dart';
 
 class EditPage extends StatelessWidget {
@@ -84,16 +83,12 @@ class EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: ((context) => EditPageBloc(storage: storage)),
-      child: BlocBuilder<EditPageBloc, EditPageState>(
-          builder: ((context, state) {
-        return EditBody(
-          onInit: () {
-            context
-                .read<EditPageBloc>()
-                .add(InitConnectionState(connection: connection));
-          },
-          padding: Padding(
+      create: ((context) => EditPageBloc(connection, storage: storage)),
+      child:
+          BlocBuilder<EditPageBloc, EditPageState>(builder: ((context, state) {
+        return SizedBox(
+          width: 100,
+          child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
