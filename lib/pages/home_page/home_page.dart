@@ -147,7 +147,7 @@ class HomePage extends StatelessWidget {
             if (state.search.isEmpty) return state.tabIndex;
 
             final indexOnScreen = items.indexOf(
-              [...originalItems, ...connectionItems, ...footerItems]
+              [...originalItems, ...flatConnectionItems, ...flatBucketItems, ...footerItems]
                   .whereType<PaneItem>()
                   .elementAt(state.tabIndex),
             );
