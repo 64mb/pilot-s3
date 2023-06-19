@@ -75,13 +75,3 @@ class AddSubmitted extends EditPageEvent {
   @override
   List<Object?> get props => [];
 }
-
-@immutable
-class InitConnectionState extends EditPageEvent {
-  const InitConnectionState({required this.connection});
-
-  final Connection connection;
-
-  @override
-  List<Object?> get props => [connection];
-}

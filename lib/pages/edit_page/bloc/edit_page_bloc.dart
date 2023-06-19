@@ -8,7 +8,8 @@ part 'edit_page_event.dart';
 part 'edit_page_state.dart';
 
 class EditPageBloc extends Bloc<EditPageEvent, EditPageState> {
-  EditPageBloc({required this.storage}) : super(const EditPageState()) {
+  EditPageBloc(Connection connection, {required this.storage})
+      : super(EditPageState.connection(connection)) {
     on<NameChanged>(_onNameChanged);
     on<AccessKeyChanged>(_onAccessKeyChanged);
     on<SecretKeyChanged>(_onSecretKeyChanged);
@@ -16,7 +17,6 @@ class EditPageBloc extends Bloc<EditPageEvent, EditPageState> {
     on<EndpointChanged>(_onEndpointChanged);
     on<AddSubmitted>(_onAddSubmitted);
     on<SaveSubmitted>(_onSaveSubmitted);
-    on<InitConnectionState>(_onInitConnectionState);
   }
 
   final Storage storage;
@@ -82,17 +82,5 @@ class EditPageBloc extends Bloc<EditPageEvent, EditPageState> {
             accessKey: state.accessKey,
             secretKey: state.secretKey,
             bucket: state.bucket));
-  }
-
-  void _onInitConnectionState(
-    InitConnectionState event,
-    Emitter<EditPageState> emit,
-  ) {
-    emit(state.copyWith(
-        name: event.connection.name,
-        accessKey: event.connection.accessKey,
-        secretKey: event.connection.secretKey,
-        endpoint: event.connection.endpoint,
-        bucket: event.connection.bucket));
   }
 }

@@ -2,6 +2,13 @@ part of 'edit_page_bloc.dart';
 
 @immutable
 class EditPageState extends Equatable {
+  EditPageState.connection(Connection connection)
+      : name = connection.name,
+        accessKey = connection.accessKey,
+        secretKey = connection.secretKey,
+        endpoint = connection.endpoint,
+        bucket = connection.bucket;
+
   const EditPageState(
       {this.name = '',
       this.accessKey = '',

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pilot_s3/widgets/path_chips/cubit/path_chips_cubit.dart';
 
 class PathChips extends StatelessWidget {
-  const PathChips({super.key, this.label = "", required this.onTap});
+  const PathChips({super.key, this.label = '', required this.onTap});
 
   final String label;
   final VoidCallback onTap;
