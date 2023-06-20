@@ -1,3 +1,16 @@
+## [1.1.0](https://github.com/64mb/pilot-s3/compare/v1.0.0...v1.1.0) (2023-06-20)
+
+
+### Features
+
+* added localization ([#31](https://github.com/64mb/pilot-s3/issues/31)) ([bef1d88](https://github.com/64mb/pilot-s3/commit/bef1d888ea50f57f24edbfbb13b4226fc173d3b8))
+* toolbar path chips navigation ([#32](https://github.com/64mb/pilot-s3/issues/32)) ([900f51e](https://github.com/64mb/pilot-s3/commit/900f51ea211b0440aaef8e2f1cb3d826f576152a))
+
+
+### Bug Fixes
+
+* fix search for items ([#33](https://github.com/64mb/pilot-s3/issues/33)) ([1b8f6eb](https://github.com/64mb/pilot-s3/commit/1b8f6eb691eb2e2652a3166bd146c626cb0f3aaa))
+
 ## 1.0.0 (2023-06-13)
 
 
