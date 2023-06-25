@@ -116,10 +116,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: pubspec
-      - name: set up nodejs
-        run: brew install node
-      - name: set up appdmg
-        run: npm install -g appdmg
+      - name: set up dmg-packer
+        run: brew install create-dmg
       - name: set up flutter
         uses: subosito/flutter-action@v2
         with:
@@ -127,17 +125,15 @@ jobs:
           channel: 'stable'
       - name: flutter enable macos desktop target
         run: flutter config --enable-macos-desktop
-      - name: flutter install distributor
-        run: dart pub global activate flutter_distributor
       - name: flutter build macos
-        run: flutter_distributor package --platform macos --targets dmg
-      - name: move build macos
-        run: mv dist/**/*.dmg dist/pilot-s3.dmg
+        run: flutter build macos --no-tree-shake-icons
+      - name: build macos dmg
+        run: create-dmg --volname "Pilot S3" --window-pos 200 120 --window-size 800 529 --app-drop-link 540 250 --hdiutil-quiet --hide-extension "pilot-s3.app" --app-drop-link 600 185 "pilot-s3.dmg" "build/macos/Build/Products/Release/"
       - name: upload macos build artifact
         uses: actions/upload-artifact@v3
         with:
           name: macos-x64
-          path: dist/pilot-s3.dmg
+          path: build/macos/Build/Products/Release/pilot-s3.dmg
   build-android:
     name: build-android
     runs-on: ubuntu-latest
