@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/64mb/pilot-s3/compare/v1.1.0...v1.1.1) (2023-06-25)
+
+
+### Bug Fixes
+
+* add android and macos builds ([703a724](https://github.com/64mb/pilot-s3/commit/703a724459f6dad353db0b14a72255845ebab8b0))
+
 ## [1.1.0](https://github.com/64mb/pilot-s3/compare/v1.0.0...v1.1.0) (2023-06-20)
 
 
