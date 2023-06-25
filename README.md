@@ -1,6 +1,6 @@
 # 📁 pilot-s3
 
-[![release](https://github.com/64mb/pilot-s3/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/64mb/pilot-s3/actions/workflows/release.yaml)
+[![analyze](https://github.com/64mb/pilot-s3/actions/workflows/analyze.yaml/badge.svg?branch=main)](https://github.com/64mb/pilot-s3/actions/workflows/analyze.yaml) [![release](https://github.com/64mb/pilot-s3/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/64mb/pilot-s3/actions/workflows/release.yaml)
 
 S3 compatible object storage gui browser
 
