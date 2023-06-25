@@ -6,6 +6,9 @@ on:
 
 name: analyze
 
+env:
+  flutter_version: '3.10.x'
+
 jobs:
   build:
     name: lint flutter code
@@ -16,7 +19,7 @@ jobs:
       - name: set up flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.x'
+          flutter-version: ${{ env.flutter_version }}
           channel: 'stable'
           cache: true
           cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
