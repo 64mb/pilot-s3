@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.app64mb.pilot-s3">
+    package="ru.app64mb.pilot_s3">
    <application
         android:label="pilot_s3"
         android:name="${applicationName}"

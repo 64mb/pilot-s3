@@ -1,4 +1,4 @@
-package ru.app64mb.pilot-s3
+package ru.app64mb.pilot_s3
 
 import io.flutter.embedding.android.FlutterActivity
 

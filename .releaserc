@@ -39,7 +39,9 @@
         "releasedLabels": true,
         "assets": [
           "linux-x64.zip",
-          "windows-x64.zip"
+          "windows-x64.zip",
+          "pilot-s3.dmg",
+          "pilot-s3.apk"
         ]
       }
     ]
