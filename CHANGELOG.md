@@ -1,3 +1,12 @@
+## [1.1.2](https://github.com/64mb/pilot-s3/compare/v1.1.1...v1.1.2) (2023-06-27)
+
+
+### Bug Fixes
+
+* add build for macos dmg ([57cd75b](https://github.com/64mb/pilot-s3/commit/57cd75bbd38eaf9dd124bd137726f3d425aa6886))
+* add linux ci build cache ([9ea1875](https://github.com/64mb/pilot-s3/commit/9ea18756b56f655ea4c4539051fb26d86cf408f9))
+* macos build path ([fedb450](https://github.com/64mb/pilot-s3/commit/fedb4509f294379fe00709d8eb91c0ed5c194bb7))
+
 ## [1.1.1](https://github.com/64mb/pilot-s3/compare/v1.1.0...v1.1.1) (2023-06-25)
 
 
