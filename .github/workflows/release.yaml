@@ -115,38 +115,38 @@ jobs:
         with:
           name: windows-x64
           path: build/windows/runner/Release/windows-x64.zip
-  # build-macos:
-  #   name: build-macos
-  #   runs-on: macos-latest
-  #   needs: calc-release-version
-  #   steps:
-  #     - name: checkout code
-  #       uses: actions/checkout@v3
-  #     - name: download release pubspec
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: pubspec
-  #     - name: set up dmg-packer
-  #       run: brew install create-dmg
-  #     - name: set up flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: ${{ env.flutter_version }}
-  #         channel: 'stable'
-  #         cache: true
-  #         cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
-  #         cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
-  #     - name: flutter enable macos desktop target
-  #       run: flutter config --enable-macos-desktop
-  #     - name: flutter build macos
-  #       run: flutter build macos --no-tree-shake-icons
-  #     - name: build macos dmg
-  #       run: create-dmg --volname "Pilot S3" --window-pos 200 120 --window-size 800 529 --app-drop-link 540 250 --hdiutil-quiet --hide-extension "pilot-s3.app" --app-drop-link 600 185 "pilot-s3.dmg" "build/macos/Build/Products/Release/"
-  #     - name: upload macos build artifact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: macos-x64
-  #         path: build/macos/Build/Products/Release/pilot-s3.dmg
+  build-macos:
+    name: build-macos
+    runs-on: macos-latest
+    needs: calc-release-version
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: download release pubspec
+        uses: actions/download-artifact@v3
+        with:
+          name: pubspec
+      - name: set up dmg-packer
+        run: brew install create-dmg
+      - name: set up flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.flutter_version }}
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
+          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
+      - name: flutter enable macos desktop target
+        run: flutter config --enable-macos-desktop
+      - name: flutter build macos
+        run: flutter build macos --no-tree-shake-icons
+      - name: build macos dmg
+        run: create-dmg --volname "Pilot S3" --window-pos 200 120 --window-size 800 529 --app-drop-link 540 250 --hdiutil-quiet --hide-extension "pilot-s3.app" --app-drop-link 600 185 "pilot-s3.dmg" "build/macos/Build/Products/Release/pilot-s3.app/"
+      - name: upload macos build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-x64
+          path: pilot-s3.dmg
   build-android:
     name: build-android
     runs-on: ubuntu-latest
@@ -237,10 +237,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: windows-x64
-      # - name: download macos build artifact
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: macos-x64
+      - name: download macos build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: macos-x64
       - name: download android build artifact
         uses: actions/download-artifact@v3
         with:
