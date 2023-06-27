@@ -141,7 +141,7 @@ jobs:
       - name: flutter build macos
         run: flutter build macos --no-tree-shake-icons
       - name: build macos dmg
-        run: create-dmg --volname "Pilot S3" --window-pos 200 120 --window-size 800 529 --app-drop-link 540 250 --hdiutil-quiet --hide-extension "pilot-s3.app" --app-drop-link 600 185 "pilot-s3.dmg" "build/macos/Build/Products/Release/pilot-s3.app/"
+        run: create-dmg --volname "Pilot S3" --window-pos 200 120 --window-size 800 529 --app-drop-link 540 250 --hdiutil-quiet --app-drop-link 600 185 "pilot-s3.dmg" "build/macos/Build/Products/Release/pilot_s3.app/"
       - name: upload macos build artifact
         uses: actions/upload-artifact@v3
         with:
