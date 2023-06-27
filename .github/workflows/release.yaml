@@ -209,11 +209,12 @@ jobs:
   github-release:
     name: github-release
     runs-on: ubuntu-latest
-    needs: [
+    needs:
+      [
         calc-release-version,
         build-linux,
         build-windows,
-        # build-macos,
+        build-macos,
         build-android,
       ]
     steps:
