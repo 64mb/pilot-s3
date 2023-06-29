@@ -4,8 +4,6 @@ import 'package:test/test.dart';
 import 'package:pilot_s3/api/api_s3.dart';
 import 'package:crypto/crypto.dart' as crypto;
 
-// import 'package:package_info_plus/package_info_plus.dart';
-
 String generateRandomString(int len) {
   var r = Random();
   const _chars =
@@ -22,31 +20,16 @@ void main() {
       secretKey: Platform.environment['TEST_S3_SECRET_KEY'] ?? '',
       defaultBucket: bucketName);
 
-  var filePath = 'test/test.txt';
+  var objectPath = 'test${generateRandomString(10)}.txt';
+  var filePath = 'test/$objectPath';
+  objectPath = 'test/$objectPath';
   var filePathCheck = '$filePath.check';
-  var objectPath = 'test.txt';
 
   var file = File(filePath);
   var fileCheck = File(filePathCheck);
 
   setUp(() async {
-    // PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    // String version = packageInfo.version;
-    String version = '12';
-
-    var containerName = 'pilot-s3-test-$version';
-
-    // var docker = Docker();
-
-    // var minioImage = docker.pull('minio/minio');
-
-    // var existing = docker.findContainerByName(containerName);
-    // if (existing != null) {
-    //   existing.delete();
-    // }
-
-    // var container = minioImage.create(containerName);
-    // container.start();
+    // TODO: up docker minio s3
   });
 
   tearDown(() async {
