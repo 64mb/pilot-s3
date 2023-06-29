@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - test-basic-api-test
 
 name: test
 
