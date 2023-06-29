@@ -109,6 +109,7 @@ class HomePage extends StatelessWidget {
               title: const Text('add_connection').tr(),
               body: EditPage(
                 storage: storage,
+                connection: Connection(),
               ),
             ),
             PaneItem(

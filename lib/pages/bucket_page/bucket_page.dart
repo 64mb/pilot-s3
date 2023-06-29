@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minio/io.dart';
-import 'package:minio/minio.dart';
 import 'package:minio/models.dart';
 import 'package:pilot_s3/models/connection.dart';
 import 'package:pilot_s3/pages/bucket_page/bloc/bucket_page_bloc.dart';

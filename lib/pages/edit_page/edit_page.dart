@@ -7,18 +7,16 @@ import 'package:pilot_s3/widgets/edit_textbox.dart';
 import 'package:pilot_s3/models/connection.dart';
 
 class EditPage extends StatelessWidget {
-  late Connection connection;
+  final Connection connection;
   final Storage storage;
   final bool edit;
 
-  EditPage({
+  const EditPage({
     super.key,
     this.edit = false,
     required this.storage,
-    Connection? connection,
-  }) {
-    this.connection = connection ?? Connection();
-  }
+    required this.connection,
+  });
 
   Row getEditButtons(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
