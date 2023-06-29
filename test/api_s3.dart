@@ -22,7 +22,6 @@ void main() {
 
   var objectPath = 'test${generateRandomString(10)}.txt';
   var filePath = 'test/$objectPath';
-  objectPath = 'test/$objectPath';
   var filePathCheck = '$filePath.check';
 
   var file = File(filePath);
