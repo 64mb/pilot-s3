@@ -14,12 +14,12 @@ String generateRandomString(int len) {
 }
 
 void main() {
-  String bucketName = const String.fromEnvironment('TEST_S3_BUCKET');
+  String bucketName = Platform.environment['TEST_S3_BUCKET'] ?? '';
 
   ApiS3 api = ApiS3(
-      endPoint: const String.fromEnvironment('TEST_S3_ENDPOINT'),
-      accessKey: const String.fromEnvironment('TEST_S3_ACCESS_KEY'),
-      secretKey: const String.fromEnvironment('TEST_S3_SECRET_KEY'),
+      endPoint: Platform.environment['TEST_S3_ENDPOINT'] ?? '',
+      accessKey: Platform.environment['TEST_S3_ACCESS_KEY'] ?? '',
+      secretKey: Platform.environment['TEST_S3_SECRET_KEY'] ?? '',
       defaultBucket: bucketName);
 
   var filePath = 'test/test.txt';
