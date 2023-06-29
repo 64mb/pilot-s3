@@ -32,60 +32,52 @@ displayProgressBar(BuildContext context) {
   });
 }
 
-deleteObject(object, connection, bucket, BuildContext context, state) =>
+deleteObject(
+        object, Connection connection, bucket, BuildContext context, state) =>
     () async {
-      Minio minio = Minio(
-          endPoint: connection.endpoint,
-          accessKey: connection.accessKey,
-          secretKey: connection.secretKey);
-
-      await minio.removeObject(bucket.name, object.key!);
+      await connection.deleteObject(object.key!, bucket: bucket.name);
 
       if (context.mounted) {
-        displayAction(context, const Text('file_deleted').tr(), Text(object.key!));
+        displayAction(
+            context, const Text('file_deleted').tr(), Text(object.key!));
         context
             .read<BucketPageBloc>()
-            .add(ObjectsRequested(prefix: path.joinAll(state.path)));
+            .add(ObjectsRequested(prefix: path_lib.joinAll(state.path)));
       }
     };
 
-uploadObject(state, connection, bucket, BuildContext context) => () async {
+uploadObject(state, Connection connection, bucket, BuildContext context) =>
+    () async {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result != null) {
         if (context.mounted) {
           displayProgressBar(context);
         }
         File file = File(result.files.single.path!);
-        Minio minio = Minio(
-            endPoint: connection.endpoint,
-            accessKey: connection.accessKey,
-            secretKey: connection.secretKey);
 
         String fileName = result.files.single.name;
-        String newPath = path.joinAll(state.path);
+        String newPath = path_lib.joinAll(state.path);
 
         String object = state.path.isNotEmpty ? '$newPath/$fileName' : fileName;
 
-        await minio.fPutObject(bucket.name, object, file.path);
+        await connection.uploadObject(file.path, object, bucket: bucket.name);
         if (context.mounted) {
           context.read<BucketPageBloc>().add(ObjectsRequested(prefix: newPath));
-          displayAction(context, const Text('file_uploaded').tr(), Text(fileName));
+          displayAction(
+              context, const Text('file_uploaded').tr(), Text(fileName));
         }
       }
     };
 
-downloadObject(object, connection, bucket, BuildContext context) => () async {
+downloadObject(object, Connection connection, bucket, BuildContext context) =>
+    () async {
       var downloadDir = await path_provider.getDownloadsDirectory();
       String? selectedDirectory = await FilePicker.platform
           .getDirectoryPath(initialDirectory: downloadDir?.path ?? '/');
       if (selectedDirectory != null) {
-        Minio minio = Minio(
-            endPoint: connection.endpoint,
-            accessKey: connection.accessKey,
-            secretKey: connection.secretKey);
-
-        await minio.fGetObject(bucket.name, object.key!,
-            path_lib.join(selectedDirectory, path_lib.basename(object.key!)));
+        await connection.downloadObject(object.key!,
+            path_lib.join(selectedDirectory, path_lib.basename(object.key!)),
+            bucket: bucket.name);
 
         if (context.mounted) {
           displayAction(
