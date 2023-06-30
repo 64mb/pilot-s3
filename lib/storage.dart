@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:minio/minio.dart';
 import 'package:minio/models.dart';
 import 'package:pilot_s3/models/connection.dart';
 import 'package:hive/hive.dart';
@@ -77,29 +77,12 @@ class Storage {
     _bucketController.add(buckets);
   }
 
-  Future<List<Bucket>> getBucketsForConnection(Connection connection) async {
-    Minio minio = Minio(
-        endPoint: connection.endpoint,
-        accessKey: connection.accessKey,
-        secretKey: connection.secretKey);
-
-    List<Bucket> buckets = [];
-
-    if (connection.bucket == null || connection.bucket == '') {
-      buckets.addAll(await minio.listBuckets());
-    } else {
-      buckets.add(Bucket(DateTime.now(), connection.bucket!));
-    }
-    return buckets;
-  }
-
   Future<Map<String, List<Bucket>>> getBuckets(
       List<Connection> connections) async {
     Map<String, List<Bucket>> bucketsMap = {};
 
     for (Connection connection in connections) {
-      bucketsMap[connection.accessKey] =
-          await getBucketsForConnection(connection);
+      bucketsMap[connection.accessKey] = await connection.getBuckets();
     }
     return bucketsMap;
   }
@@ -122,13 +105,12 @@ class Storage {
 
   Future<ListObjectsResult> getObjects(Connection connection, String bucket,
       {String prefix = '', bool recursive = false, String? startAfter}) async {
-    Minio minio = Minio(
-        endPoint: connection.endpoint,
-        accessKey: connection.accessKey,
-        secretKey: connection.secretKey);
-
-    String formattedPrefix = prefix == '' ? prefix : '$prefix/';
-    return await minio.listAllObjectsV2(bucket, prefix: formattedPrefix);
+    var result = connection.getObjects(
+        bucket: bucket,
+        prefix: prefix,
+        recursive: recursive,
+        startAfter: startAfter);
+    return result;
   }
 
   int getConnectionCount() {
@@ -140,11 +122,11 @@ class Storage {
     int count = 0;
     if (_box == null) return count;
     List<Connection> connections = _box!.values.toList();
-    Map<String, List<Bucket>> buckets = await getBuckets(connections);
 
-    for (final bucketsList in buckets.values) {
-      count += bucketsList.length;
-    }
+    List<int> bucketsCountSeed =
+        await Future.wait(connections.map((conn) => conn.getBucketsCount()));
+
+    count = bucketsCountSeed.sum;
     return count;
   }
 

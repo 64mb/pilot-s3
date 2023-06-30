@@ -1,9 +1,10 @@
 import 'package:hive/hive.dart';
+import 'package:pilot_s3/api/api_s3.dart';
 
 part 'connection.g.dart';
 
 @HiveType(typeId: 2)
-class Connection {
+class Connection extends ApiS3 {
   @HiveField(0)
   final String endpoint;
   @HiveField(1)
@@ -15,10 +16,15 @@ class Connection {
   @HiveField(4)
   final String? bucket;
 
-  const Connection(
+  Connection(
       {this.name = '',
       this.endpoint = '',
       this.accessKey = '',
       this.secretKey = '',
-      this.bucket = ''});
+      this.bucket = ''})
+      : super(
+            endPoint: endpoint,
+            accessKey: accessKey,
+            secretKey: secretKey,
+            defaultBucket: bucket);
 }

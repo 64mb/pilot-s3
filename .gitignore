@@ -30,6 +30,11 @@ migrate_working_dir/
 /build/
 /dist/
 
+# ci
+/coverage/
+coverage.lcov
+test.json
+
 # symbolication related
 app.*.symbols
 

@@ -109,6 +109,7 @@ class HomePage extends StatelessWidget {
               title: const Text('add_connection').tr(),
               body: EditPage(
                 storage: storage,
+                connection: Connection(),
               ),
             ),
             PaneItem(
@@ -147,9 +148,12 @@ class HomePage extends StatelessWidget {
             if (state.search.isEmpty) return state.tabIndex;
 
             final indexOnScreen = items.indexOf(
-              [...originalItems, ...flatConnectionItems, ...flatBucketItems, ...footerItems]
-                  .whereType<PaneItem>()
-                  .elementAt(state.tabIndex),
+              [
+                ...originalItems,
+                ...flatConnectionItems,
+                ...flatBucketItems,
+                ...footerItems
+              ].whereType<PaneItem>().elementAt(state.tabIndex),
             );
             if (indexOnScreen.isNegative) return 0;
             return indexOnScreen;

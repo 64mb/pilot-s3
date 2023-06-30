@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minio/io.dart';
-import 'package:minio/minio.dart';
 import 'package:minio/models.dart';
 import 'package:pilot_s3/models/connection.dart';
 import 'package:pilot_s3/pages/bucket_page/bloc/bucket_page_bloc.dart';
@@ -13,7 +11,6 @@ import 'package:file_icon/file_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path_lib;
-import 'package:path/path.dart' as path;
 import 'package:pilot_s3/widgets/bucket_toolbar.dart';
 
 part 'bucket_page_elements.dart';
@@ -125,7 +122,7 @@ class BucketPage extends StatelessWidget {
               context.read<BucketPageBloc>().add(const ToBack());
               context
                   .read<BucketPageBloc>()
-                  .add(ObjectsRequested(prefix: path.joinAll(newPath)));
+                  .add(ObjectsRequested(prefix: path_lib.joinAll(newPath)));
             },
           );
           if (state.path.isNotEmpty) allTiles.add(backTile);
@@ -138,12 +135,12 @@ class BucketPage extends StatelessWidget {
               context.read<BucketPageBloc>().add(DirectoryAdded(path: newPath));
               context
                   .read<BucketPageBloc>()
-                  .add(ObjectsRequested(prefix: path.joinAll(newPath)));
+                  .add(ObjectsRequested(prefix: path_lib.joinAll(newPath)));
             },
             onRefresh: () {
               context
                   .read<BucketPageBloc>()
-                  .add(ObjectsRequested(prefix: path.joinAll(state.path)));
+                  .add(ObjectsRequested(prefix: path_lib.joinAll(state.path)));
             },
             onUpload: uploadObject(state, connection, bucket, context),
           );
