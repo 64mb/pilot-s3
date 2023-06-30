@@ -29,7 +29,7 @@ jobs:
       - name: flutter pub get
         run: flutter pub get
       - name: test
-        run: dart test test/**.dart --file-reporter=json:test.json
+        run: flutter test --file-reporter=json:test.json
         env:
           TEST_S3_ENDPOINT: ${{ vars.TEST_S3_ENDPOINT }}
           TEST_S3_BUCKET: ${{ secrets.TEST_S3_BUCKET}}
