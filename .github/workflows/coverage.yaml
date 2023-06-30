@@ -28,18 +28,16 @@ jobs:
       - name: flutter pub get
         run: flutter pub get
       - name: coverage
-        run: flutter test --file-reporter=json:test.json --coverage=coverage
+        run: flutter test --file-reporter=json:test.json --coverage
         env:
           TEST_S3_ENDPOINT: ${{ vars.TEST_S3_ENDPOINT }}
           TEST_S3_BUCKET: ${{ secrets.TEST_S3_BUCKET}}
           TEST_S3_ACCESS_KEY: ${{ secrets.TEST_S3_ACCESS_KEY}}
           TEST_S3_SECRET_KEY: ${{ secrets.TEST_S3_SECRET_KEY}}
-      - name: convert coverage to icov
-        run: dart run coverage:format_coverage --lcov --in=coverage --out=coverage.lcov --report-on=lib
       - name: upload coverage reports to codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage.lcov
+          files: coverage/lcov.info
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

@@ -32,7 +32,6 @@ migrate_working_dir/
 
 # ci
 /coverage/
-coverage.lcov
 test.json
 
 # symbolication related
