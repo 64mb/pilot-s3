@@ -130,6 +130,7 @@ class EditPage extends StatelessWidget {
                   EditTextBox(
                       label: 'Secret Key',
                       value: connection.secretKey,
+                      passwordMode: true,
                       onChanged: (value) {
                         context
                             .read<EditPageBloc>()
