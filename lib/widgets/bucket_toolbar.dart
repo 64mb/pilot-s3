@@ -53,15 +53,19 @@ class BucketToolbar extends StatelessWidget {
             width: 6,
           ),
           IconButton(
-              icon: const Icon(FluentIcons.home), onPressed: () {
+              icon: const Icon(FluentIcons.home),
+              onPressed: () {
                 onChange([]);
               }),
           const SizedBox(
             width: 16,
           ),
           Expanded(
-            child: Row(
-              children: widgets,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: widgets,
+              ),
             ),
           ),
           const SizedBox(

@@ -18,53 +18,55 @@ class EditPage extends StatelessWidget {
     required this.connection,
   });
 
-  Row getEditButtons(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Button(
-        child: const Text('delete_connection').tr(),
-        onPressed: () async {
-          showDialog(
-              context: context,
-              builder: (context) => ContentDialog(
-                    title:
-                        const Text('delete_connection_confirmation_title').tr(),
-                    content: const Text(
-                      'delete_connection_confirmation_description',
-                    ).tr(),
-                    actions: [
-                      Button(
-                        onPressed: () {
-                          storage.deleteConnection(connection);
-                          Navigator.pop(context);
-                        },
-                        child: const Text('delete').tr(),
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('cancel').tr(),
-                      )
-                    ],
-                  ));
-        },
-      ),
-      const SizedBox(
-        width: 20,
-      ),
-      Button(
-        child: const Text('save_connection').tr(),
-        onPressed: () async {
-          context
-              .read<EditPageBloc>()
-              .add(SaveSubmitted(connection: connection));
-        },
-      ),
-    ]);
+  Wrap getEditButtons(BuildContext context) {
+    return Wrap(
+        spacing: 20,
+        runSpacing: 12,
+        alignment: WrapAlignment.end,
+        children: [
+          Button(
+            child: const Text('delete_connection').tr(),
+            onPressed: () async {
+              showDialog(
+                  context: context,
+                  builder: (context) => ContentDialog(
+                        title:
+                            const Text('delete_connection_confirmation_title')
+                                .tr(),
+                        content: const Text(
+                          'delete_connection_confirmation_description',
+                        ).tr(),
+                        actions: [
+                          Button(
+                            onPressed: () {
+                              storage.deleteConnection(connection);
+                              Navigator.pop(context);
+                            },
+                            child: const Text('delete').tr(),
+                          ),
+                          FilledButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('cancel').tr(),
+                          )
+                        ],
+                      ));
+            },
+          ),
+          Button(
+            child: const Text('save_connection').tr(),
+            onPressed: () async {
+              context
+                  .read<EditPageBloc>()
+                  .add(SaveSubmitted(connection: connection));
+            },
+          ),
+        ]);
   }
 
-  Row getCreateButtons(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+  Wrap getCreateButtons(BuildContext context) {
+    return Wrap(children: [
       Button(
         child: const Text('add_connection').tr(),
         onPressed: () async {
@@ -74,7 +76,7 @@ class EditPage extends StatelessWidget {
     ]);
   }
 
-  Row getButtons(bool edit, BuildContext context) {
+  Wrap getButtons(bool edit, BuildContext context) {
     if (edit) {
       return getEditButtons(context);
     }
@@ -90,9 +92,9 @@ class EditPage extends StatelessWidget {
         return SizedBox(
           width: 100,
           child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   EditTextBox(
                       label: tr('name'),
