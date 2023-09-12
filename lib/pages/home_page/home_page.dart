@@ -160,6 +160,13 @@ class HomePage extends StatelessWidget {
           }
 
           return NavigationView(
+            appBar: const NavigationAppBar(
+              automaticallyImplyLeading: false,
+              title: Text(
+                'PilotS3',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
             pane: NavigationPane(
                 header: const SizedBox(height: 10.0),
                 indicator: const EndNavigationIndicator(),
