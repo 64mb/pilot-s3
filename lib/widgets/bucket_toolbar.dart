@@ -1,6 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/rendering.dart';
 import 'package:pilot_s3/widgets/path_chips/path_chips.dart';
 
 class BucketToolbar extends StatelessWidget {
