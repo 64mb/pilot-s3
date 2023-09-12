@@ -13,31 +13,22 @@ class HomeDashboard extends StatelessWidget {
         future: storage.getDashboardStatistic(),
         builder: (context, snapshot) {
           return snapshot.hasData
-              ? SingleChildScrollView(
-                  child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          DashboardCard(
-                            count: snapshot.data!['connections']!,
-                            label: 'connections_plural'
-                          ),
-                          const SizedBox(
-                            width: 24,
-                          ),
-                          DashboardCard(
-                            count: snapshot.data!['buckets']!,
-                            label: 'buckets_plural'
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ))
+              ? GridView.extent(
+                  primary: true,
+                  padding: const EdgeInsets.all(20),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  maxCrossAxisExtent: 340,
+                  childAspectRatio: 1.5,
+                  children: [
+                    DashboardCard(
+                        count: snapshot.data!['connections']!,
+                        label: 'connections_plural'),
+                    DashboardCard(
+                        count: snapshot.data!['buckets']!,
+                        label: 'buckets_plural'),
+                  ],
+                )
               : const Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Center(
