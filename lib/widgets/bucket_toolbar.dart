@@ -1,4 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:pilot_s3/widgets/path_chips/path_chips.dart';
 
 class BucketToolbar extends StatelessWidget {
@@ -53,15 +55,19 @@ class BucketToolbar extends StatelessWidget {
             width: 6,
           ),
           IconButton(
-              icon: const Icon(FluentIcons.home), onPressed: () {
+              icon: const Icon(FluentIcons.home),
+              onPressed: () {
                 onChange([]);
               }),
           const SizedBox(
             width: 16,
           ),
           Expanded(
-            child: Row(
-              children: widgets,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: widgets,
+              ),
             ),
           ),
           const SizedBox(
