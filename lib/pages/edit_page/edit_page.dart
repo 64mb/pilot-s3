@@ -92,7 +92,7 @@ class EditPage extends StatelessWidget {
         return SizedBox(
           width: 100,
           child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

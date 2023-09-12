@@ -169,9 +169,12 @@ class BucketPage extends StatelessWidget {
               ? [toolbar, filterBox, ...allTiles]
               : [toolbar, filterBox, progressWidget];
           return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: allWidgets,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: allWidgets,
+              ),
             ),
           );
         },
