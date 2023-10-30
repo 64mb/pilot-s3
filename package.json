@@ -1,0 +1,13 @@
+{
+  "name": "pilot-s3",
+  "scripts": {
+    "start": "mv .releaserc .releaserc.bak && cp .releaserc-pubspec .releaserc && semantic-release && mv .releaserc.bak .releaserc"
+  },
+  "dependencies": {
+    "@64mb/semantic-release-flutter-plugin": "1.0.0",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "conventional-changelog-conventionalcommits": "7.0.2",
+    "semantic-release": "22.0.5"
+  }
+}

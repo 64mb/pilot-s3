@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 env:
-  flutter_version: '3.10.x'
+  flutter_version: "3.10.x"
 
 jobs:
   calc-release-version:
@@ -25,11 +25,12 @@ jobs:
       - name: override releaserc config
         run: cat .releaserc-pubspec > .releaserc
       - name: calculate release version
-        uses: cycjimmy/semantic-release-action@v3
+        uses: actions/setup-node@v3
         with:
-          extra_plugins: |
-            @64mb/semantic-release-flutter-plugin
-            conventional-changelog
+          node-version: 18
+          cache: "npm"
+      - run: npm ci
+      - run: npx semantic-release
         env:
           # only for read
           GITHUB_TOKEN: ${{ secrets.CI_RELEASE_TOKEN }}
@@ -57,11 +58,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: 'stable'
+          channel: "stable"
           cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
-          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
-
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
       - name: apt install build deps
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
@@ -96,10 +96,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: 'stable'
+          channel: "stable"
           cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
-          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
       - name: flutter enable windows desktop target
         run: flutter config --enable-windows-desktop
       - name: flutter build windows
@@ -132,10 +132,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: 'stable'
+          channel: "stable"
           cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
-          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
       - name: flutter enable macos desktop target
         run: flutter config --enable-macos-desktop
       - name: flutter build macos
@@ -162,10 +162,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: 'stable'
+          channel: "stable"
           cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
-          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
       - name: flutter build android
         run: flutter build apk --no-tree-shake-icons
       - name: move build android
@@ -190,10 +190,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: 'stable'
+          channel: "stable"
           cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
-          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
       - name: flutter build web
         run: flutter build web --no-tree-shake-icons
       - name: upload to s3
@@ -205,7 +205,7 @@ jobs:
           aws_bucket: ${{ secrets.S3_BUCKET }}
           endpoint: ${{ vars.S3_ENDPOINT }}
           source_dir: build/web
-          destination_dir: ''
+          destination_dir: ""
   github-release:
     name: github-release
     runs-on: ubuntu-latest
@@ -247,11 +247,12 @@ jobs:
         with:
           name: android-x64
       - name: release
-        uses: cycjimmy/semantic-release-action@v3
+        uses: actions/setup-node@v3
         with:
-          extra_plugins: |
-            @64mb/semantic-release-flutter-plugin
-            conventional-changelog
+          node-version: 18
+          cache: "npm"
+      - run: npm ci
+      - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.CI_RELEASE_TOKEN }}
           GIT_AUTHOR_NAME: 64mb-robot

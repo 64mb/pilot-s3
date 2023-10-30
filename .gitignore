@@ -30,6 +30,9 @@ migrate_working_dir/
 /build/
 /dist/
 
+# node
+node_modules
+
 # ci
 /coverage/
 test.json
