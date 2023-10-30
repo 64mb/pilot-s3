@@ -1,3 +1,11 @@
+## [1.2.0](https://github.com/64mb/pilot-s3/compare/v1.1.2...v1.2.0) (2023-10-30)
+
+
+### Features
+
+* mobile adaptive layout ([#40](https://github.com/64mb/pilot-s3/issues/40)) ([858189f](https://github.com/64mb/pilot-s3/commit/858189f885b431a49f3d8e7342c33cb40f0b873e))
+* obscure text for secret key ([#37](https://github.com/64mb/pilot-s3/issues/37)) ([d0d1376](https://github.com/64mb/pilot-s3/commit/d0d13760bdd9023d7d4fed22d991bf54b70b6d6a))
+
 ## [1.1.2](https://github.com/64mb/pilot-s3/compare/v1.1.1...v1.1.2) (2023-06-27)
 
 
